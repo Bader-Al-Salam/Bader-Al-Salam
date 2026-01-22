@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>منصة مُحفِّظي | متابعة حفظ القرآن الكريم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #10B981; 
+            --primary-dark: #059669;
+            --secondary-color: #F59E0B;
+            --bg-color: #F3F4F6;
+            --card-bg: #FFFFFF;
+            --text-main: #1F2937;
+            --text-light: #6B7280;
+            --danger: #EF4444;
+            --success: #10B981;
+            --info: #3B82F6;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; padding-bottom: 80px; min-height: 100vh; }
+
+        header { background-color: var(--card-bg); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; padding: 0.5rem 0; }
+        .navbar { max-width: 1200px; margin: 0 auto; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .logo { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; }
+        .nav-actions { display: flex; align-items: center; gap: 10px; }
+        .nav-actions button { background: none; border: none; cursor: pointer; font-size: 0.9rem; color: var(--text-main); font-weight: 600; transition: color 0.3s;}
+        .nav-actions button:hover { color: var(--primary-color); }
+        .btn-home { color: var(--text-main) !important; border: 1px solid #E5E7EB; padding: 0.4rem 0.8rem; border-radius: 20px; display: none; }
+        .btn-login { background-color: var(--primary-color) !important; color: white !important; padding: 0.4rem 1rem; border-radius: 20px; }
+
+        main { max-width: 1200px; margin: 1rem auto; padding: 0 1rem; position: relative; }
+
+        /* --- الصفحة الرئيسية --- */
+        #home-view { display: block; animation: fadeIn 0.5s ease-in; }
+        .welcome-hero { text-align: center; padding: 3rem 1rem; background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)); border-radius: var(--radius); color: white; margin-bottom: 2rem; box-shadow: var(--shadow); }
+        .welcome-hero h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .welcome-hero p { font-size: 1rem; opacity: 0.9; }
+
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .menu-card { background: var(--card-bg); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; }
+        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: var(--primary-color); }
+        .menu-card i { font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem; }
+        .menu-card h2 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.5rem; }
+        .menu-card p { font-size: 0.9rem; color: var(--text-light); }
+
+        /* --- لوحة التحكم والبيانات --- */
+        #dashboard-view { display: none; animation: fadeIn 0.5s ease-in; }
+        
+        #auth-section { display: none; max-width: 100%; margin: 1rem auto; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; width: 100%; }
+        .form-group { margin-bottom:1rem; text-align: right; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        .form-control { width: 100%; padding: 0.8rem; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 1rem; }
+        .btn-submit { width: 100%; padding: 0.8rem; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+
+        /* النماذج */
+        #teacher-panel, #reciters-panel { display: none; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2rem; border-right: 5px solid var(--secondary-color); }
+        .input-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary-color); }
+        .stat-label { font-size: 0.85rem; color: var(--text-light); }
+
+        .table-container { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); overflow-x: auto; border: 1px solid #E5E7EB; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th, td { padding: 0.8rem; text-align: right; border-bottom: 1px solid #E5E7EB; vertical-align: middle; white-space: nowrap; }
+        
+        .btn-delete { background-color: #FEE2E2; color: #991B1B; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-delete:hover { background-color: #EF4444; color: white; }
+
+        .rating-wrapper { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        
+        .btn-like { background: none; border: 1px solid #E5E7EB; border-radius: 20px; padding: 0.3rem 0.6rem; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; transition: transform 0.2s, background-color 0.2s; color: var(--text-main); height: 32px; }
+        .btn-like:hover:not(:disabled) { background-color: #FCE7F3; border-color: #EC4899; transform: scale(1.05); }
+        .btn-like:disabled { cursor: default; opacity: 0.6; background-color: #f9fafb; }
+        .btn-like i { color: #EC4899; font-size: 0.9rem; }
+        .like-count { font-weight: 700; font-size: 0.8rem; }
+
+        .badge { padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;}
+        .badge-excellent { background-color: #D1FAE5; color: #065F46; }
+        .badge-good { background-color: #DBEAFE; color: #1E40AF; }
+        .badge-needs-improvement { background-color: #FEE2E2; color: #991B1B; }
+        
+        .empty-state { text-align: center; padding: 3rem; color: var(--text-light); }
+
+        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; }
+        .toast { padding: 0.8rem; border-radius: 8px; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease-out; text-align: center; font-size: 0.9rem; }
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary-color); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        @media (max-width: 768px) {
+            .logo { font-size: 1rem; }
+            .stat-value { font-size: 1.8rem; }
+            .input-row { grid-template-columns: 1fr; gap: 0.8rem; }
+            .rating-wrapper { flex-direction: row; justify-content: space-between; width: 100%; }
+            .btn-like { flex-grow: 1; justify-content: center; padding: 0.4rem; }
+            .btn-home { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="navbar">
+            <div class="logo"><i class="fas fa-quran"></i> <span>حلقة علي بن ابي طالب</span></div>
+            <div class="nav-actions">
+                <button id="btn-home" class="nav-actions btn-home" onclick="navigateTo('home')">
+                    <i class="fas fa-home"></i> الرئيسية
+                </button>
+                
+                <span id="user-display" style="display:none; font-weight:600; font-size: 0.9rem;"></span>
+                <button id="btn-logout" onclick="handleLogout()" style="display:none; color:var(--danger);">خروج</button>
+                <button id="btn-login-nav" class="btn-login" onclick="toggleAuthModal()">دخول المعلم</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- 1. الصفحة الرئيسية -->
+        <section id="home-view">
+            <div class="welcome-hero">
+                <h1>مرحبا بكم في حلقة علي بن ابي طالب</h1>
+                <p>الشيخ : معاذ زهير المحمد</p>
+            </div>
+
+            <div class="cards-grid">
+                <div class="menu-card" onclick="navigateTo('reciters')">
+                    <i class="fas fa-book-open"></i>
+                    <h2>المختبرون في الأجزاء</h2>
+                    <p>سجل الطلاب الذين اختبروا في أجزاء من القرآن الكريم لهذا الشهر</p>
+                </div>
+
+                <div class="menu-card" onclick="navigateTo('dashboard')">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h2>التقرير اليومي</h2>
+                    <p>التقرير اليومي الشامل للمتابعة اليومية</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. لوحة التحكم والبيانات -->
+        <section id="dashboard-view">
+            <h2 id="page-title" style="margin-bottom: 1.5rem; font-size: 1.2rem; border-bottom: 2px solid var(--primary-color); display: inline-block; padding-bottom: 5px;">منصة المتابعة اليومية</h2>
+
+            <section id="auth-section">
+                <h3>تسجيل دخول المعلم</h3>
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="email" class="form-control" required></div>
+                    <div class="form-group"><label>كلمة المرور</label><input type="password" id="password" class="form-control" required></div>
+                    <button type="submit" class="btn-submit"><span id="login-btn-text">دخول</span><span id="login-loader" class="loader" style="display:none;"></span></button>
+                    <button type="button" onclick="toggleAuthModal()" style="margin-top:1rem; border:none; background:none; text-decoration:underline; cursor:pointer; color: var(--text-light);">إلغاء</button>
+                </form>
+            </section>
+
+            <!-- نموذج المتابعة اليومية -->
+            <section id="teacher-panel">
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">تسجيل متابعة يومية (آية / صفحة)</h3>
+                <form id="entry-form" onsubmit="handleSubmit(event)">
+                    <div class="input-row">
+                        <div class="form-group"><label>اسم الطالب</label><input type="text" id="student-name" class="form-control" placeholder="مثال: أحمد محمد" required></div>
+                        <div class="form-group">
+                            <label>المقدار</label>
+                            <div style="display:flex; gap:5px;">
+                                <input type="number" id="amount" class="form-control" min="1" placeholder="1" required>
+                                <select id="unit" class="form-control" style="width:100px;">
+                                    <option value="آية">آية</option>
+                                    <option value="صفحة">صفحة</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group"><label>التقييم</label><select id="level" class="form-control" required><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="needs-improvement">يحتاج تحسين</option></select></div>
+                    </div>
+                    <div class="form-group" style="margin-top:10px;"><label>الملاحظة</label><input type="text" id="notes" class="form-control" placeholder="ملاحظات اختيارية..."></div>
+                    <div style="text-align:left; margin-top: 1rem;"><button type="submit" class="btn-submit" style="width:auto; display:inline-flex; gap:5px; justify-content: center;"><i class="fas fa-cloud-upload-alt"></i> تحديث البيانات</button></div>
+                </form>
+            </section>
+
+            <!-- نموذج المختبرين في الأجزاء -->
+            <section id="reciters-panel">
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">إضافة مختبر جديد</h3>
+                <form id="reciters-form" onsubmit="handleRecitersSubmit(event)">
+                    <div class="input-row">
+                        <div class="form-group"><label>اسم الطالب</label><input type="text" id="reciter-name" class="form-control" placeholder="اسم الطالب" required></div>
+                        <div class="form-group"><label>عدد الأجزاء</label><input type="number" id="reciter-amount" class="form-control" min="1" placeholder="عدد الأجزاء" required></div>
+                        <div class="form-group"><label>الدرجة من 100%</label><input type="number" id="reciter-score" class="form-control" min="0" max="100" placeholder="100" required></div>
+                        <div class="form-group"><label>التقييم</label><select id="reciter-level" class="form-control" required><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="needs-improvement">يحتاج تحسين</option></select></div>
+                    </div>
+                    <div class="form-group" style="margin-top:10px;"><label>تاريخ الاختبار</label><input type="date" id="reciter-date" class="form-control" required></div>
+                    <div style="text-align:left; margin-top: 1rem;"><button type="submit" class="btn-submit" style="width:auto; display:inline-flex; gap:5px; justify-content: center;"><i class="fas fa-save"></i> حفظ المختبر</button></div>
+                </form>
+            </section>
+
+            <section class="stats-grid">
+                <div class="stat-card"><div class="stat-label">المتابعة المذكورة</div><div class="stat-value" id="stat-total">0</div></div>
+                <div class="stat-card"><div class="stat-label">ممتاز</div><div class="stat-value" id="stat-excellent" style="color:var(--secondary-color);">0</div></div>
+                <div class="stat-card"><div class="stat-label">يحتاج مراجعة</div><div class="stat-value" id="stat-review" style="color:var(--danger);">0</div></div>
+            </section>
+
+            <section>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <h3 style="font-size: 1.1rem;">السجل</h3>
+                    <small style="color:var(--text-light);">اسحب الجدول لليمين للرؤية</small>
+                </div>
+                <div class="table-container">
+                    <table id="records-table">
+                        <thead>
+                            <tr>
+                                <th>الطالب</th>
+                                <th>المقدار</th>
+                                <th>التقييم والتفاعل</th> 
+                                <th>ملاحظات</th>
+                                <th>التاريخ</th>
+                                <th id="th-actions" style="display:none;">إجراءات</th> 
+                            </tr>
+                        </thead>
+                        <tbody id="records-body"></tbody>
+                    </table>
+                    <div id="empty-msg" class="empty-state">لا توجد بيانات حالياً</div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <div id="toast-container"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc, updateDoc, increment, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDym9mjGHbqwhAkZk1TcM6_iNi2yAjyztc",
+          authDomain: "bader-al-salam-eb054.firebaseapp.com",
+          projectId: "bader-al-salam-eb054",
+          storageBucket: "bader-al-salam-eb054.firebasestorage.app",
+          messagingSenderId: "899653230275",
+          appId: "1:899653230275:web:63a813f6d1454412560c76",
+          measurementId: "G-8Q1BCVL313"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentView = 'home'; // home, dashboard, reciters
+        let cachedSnapshot = null; // لتخزين البيانات وتحديث العرض فوراً
+
+        // --- دالة التنقل المحسنة ---
+        window.navigateTo = (view) => {
+            const homeView = document.getElementById('home-view');
+            const dashboardView = document.getElementById('dashboard-view');
+            const homeBtn = document.getElementById('btn-home');
+            const pageTitle = document.getElementById('page-title');
+            const teacherPanel = document.getElementById('teacher-panel');
+            const recitersPanel = document.getElementById('reciters-panel');
+
+            currentView = view;
+
+            if (view === 'home') {
+                homeView.style.display = 'block';
+                dashboardView.style.display = 'none';
+                homeBtn.style.display = 'none';
+                teacherPanel.style.display = 'none';
+                recitersPanel.style.display = 'none';
+            } else if (view === 'reciters') {
+                homeView.style.display = 'none';
+                dashboardView.style.display = 'block';
+                homeBtn.style.display = 'block';
+                pageTitle.textContent = 'المختبرون في الأجزاء لهذا الشهر';
+                updateFormVisibility(auth.currentUser);
+                // --- تحديث فوري للجدول عند التنقل ---
+                if (cachedSnapshot) renderTable(cachedSnapshot, 'reciters');
+            } else if (view === 'dashboard') {
+                homeView.style.display = 'none';
+                dashboardView.style.display = 'block';
+                homeBtn.style.display = 'block';
+                pageTitle.textContent = 'التقرير اليومي';
+                updateFormVisibility(auth.currentUser);
+                // --- تحديث فوري للجدول عند التنقل ---
+                if (cachedSnapshot) renderTable(cachedSnapshot, 'dashboard');
+            }
+        };
+
+        const updateFormVisibility = (user) => {
+            const teacherPanel = document.getElementById('teacher-panel');
+            const recitersPanel = document.getElementById('reciters-panel');
+            const authSection = document.getElementById('auth-section');
+            
+            teacherPanel.style.display = 'none';
+            recitersPanel.style.display = 'none';
+
+            if (user) {
+                authSection.style.display = 'none';
+                if (currentView === 'reciters') {
+                    recitersPanel.style.display = 'block';
+                } else if (currentView === 'dashboard') {
+                    teacherPanel.style.display = 'block';
+                }
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            const loginBtn = document.getElementById('btn-login-nav');
+            const logoutBtn = document.getElementById('btn-logout');
+            const userDisplay = document.getElementById('user-display');
+            const actionsHeader = document.getElementById('th-actions');
+
+            if(user) {
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'inline-block';
+                userDisplay.style.display = 'inline-block';
+                userDisplay.textContent = `مرحباً`;
+                actionsHeader.style.display = 'table-cell'; 
+                updateFormVisibility(user);
+            } else {
+                loginBtn.style.display = 'inline-block';
+                logoutBtn.style.display = 'none';
+                userDisplay.style.display = 'none';
+                actionsHeader.style.display = 'none'; 
+                updateFormVisibility(null);
+            }
+        });
+
+        window.toggleAuthModal = () => {
+            const s = document.getElementById('auth-section');
+            s.style.display = s.style.display === 'block' ? 'none' : 'block';
+        };
+
+        window.handleLogin = async (e) => {
+            e.preventDefault();
+            const l = document.getElementById('login-loader');
+            l.style.display = 'inline-block';
+            try {
+                await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
+                showToast('تم تسجيل الدخول', 'success');
+                document.getElementById('login-form').reset();
+            } catch(err) { showToast('خطأ: '+err.message, 'error'); }
+            l.style.display = 'none';
+        };
+
+        window.handleLogout = () => { signOut(auth); showToast('تم الخروج', 'info'); };
+
+        // --- دالة حفظ المختبرين ---
+        window.handleRecitersSubmit = async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('reciter-name').value;
+            const amount = document.getElementById('reciter-amount').value;
+            const score = document.getElementById('reciter-score').value;
+            const level = document.getElementById('reciter-level').value;
+            const dateStr = document.getElementById('reciter-date').value;
+            
+            const btn = e.target.querySelector('button');
+            const old = btn.innerHTML;
+            btn.innerHTML = '<span class="loader"></span> جاري الحفظ...';
+
+            try {
+                let ts = serverTimestamp();
+                if (dateStr) {
+                    const dateObj = new Date(dateStr);
+                    dateObj.setHours(12, 0, 0, 0);
+                    ts = Timestamp.fromDate(dateObj);
+                }
+
+                await addDoc(collection(db, "daily_records"), {
+                    qwe: name,
+                    asd: parseInt(amount),
+                    unit: 'جزء', 
+                    score: parseInt(score), 
+                    zxc: level, 
+                    nmk: 'اختبار أجزاء',
+                    uoi: ts,
+                    likes: 0 
+                });
+                showToast('تم حفظ المختبر', 'success');
+                document.getElementById('reciters-form').reset();
+                document.getElementById('reciter-date').valueAsDate = new Date();
+            } catch(err) { showToast('فشل الحفظ', 'error'); }
+            btn.innerHTML = old;
+        };
+
+        // --- دالة الحفظ العامة ---
+        window.handleSubmit = async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const old = btn.innerHTML;
+            btn.innerHTML = '<span class="loader"></span> جاري الحفظ...';
+            try {
+                const selectedUnit = document.getElementById('unit').value; 
+                await addDoc(collection(db, "daily_records"), {
+                    qwe: document.getElementById('student-name').value,
+                    asd: parseInt(document.getElementById('amount').value),
+                    unit: selectedUnit,
+                    zxc: document.getElementById('level').value,
+                    nmk: document.getElementById('notes').value,
+                    uoi: serverTimestamp(),
+                    likes: 0 
+                });
+                showToast('تم الحفظ', 'success');
+                document.getElementById('entry-form').reset();
+            } catch(err) { showToast('فشل الحفظ', 'error'); }
+            btn.innerHTML = old;
+        };
+
+        window.handleLike = async (id) => {
+            let likedIds = JSON.parse(localStorage.getItem('hifz_platform_likes') || "[]");
+            if (likedIds.includes(id)) { showToast('تفاعلت مسبقاً!', 'info'); return; }
+            try {
+                await updateDoc(doc(db, "daily_records", id), { likes: increment(1) });
+                likedIds.push(id);
+                localStorage.setItem('hifz_platform_likes', JSON.stringify(likedIds));
+                showToast('شكراً على تفاعلك ❤️', 'success');
+            } catch(err) { showToast('فشل الإرسال', 'error'); }
+        };
+
+        window.handleDelete = async (id) => {
+            if(confirm('حذف التقييم نهائياً؟')) {
+                try {
+                    await deleteDoc(doc(db, "daily_records", id));
+                    showToast('تم الحذف', 'success');
+                } catch(err) { showToast('فشل الحذف', 'error'); }
+            }
+        };
+
+        // --- دالة رسم الجدول (منفصلة لسهولة التحديث) ---
+        function renderTable(snap, targetView) {
+            const body = document.getElementById('records-body');
+            const empty = document.getElementById('empty-msg');
+            const table = document.getElementById('records-table');
+            body.innerHTML = ''; // مسح الجدول تماماً
+            let s=0, e=0, n=0;
+            
+            const isAdmin = auth.currentUser !== null;
+            const likedIds = JSON.parse(localStorage.getItem('hifz_platform_likes') || "[]");
+            
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+
+            let visibleCount = 0;
+
+            if(snap.empty) { empty.style.display='block'; table.style.display='none'; }
+            else {
+                snap.forEach(docSnap => {
+                    const d = docSnap.data();
+                    const docDate = d.uoi ? d.uoi.toDate() : null;
+                    
+                    let isVisible = false;
+
+                    // منطق الفصل الصارم والمباشر
+                    if (targetView === 'reciters') {
+                        // صفحة المختبرين: يظهر فقط إذا كان "جزء" و "الشهر الحالي"
+                        if (d.unit === 'جزء') {
+                            if (!docDate || (docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear)) {
+                                isVisible = true;
+                            }
+                        }
+                    } else if (targetView === 'dashboard') {
+                        // صفحة المنصة العامة: يظهر فقط إذا لم يكن "جزء" (أي آية أو صفحة)
+                        if (d.unit !== 'جزء') {
+                            isVisible = true;
+                        }
+                    }
+
+                    if (isVisible) {
+                        visibleCount++;
+                        if(d.zxc==='excellent') e++; else if(d.zxc==='needs-improvement') n++;
+                        
+                        const t = docDate ? new Intl.DateTimeFormat('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }).format(docDate) : '';
+                        const badgeClass = d.zxc==='excellent'?'badge-excellent':(d.zxc==='needs-improvement'?'badge-needs-improvement':'badge-good');
+                        const badgeText = d.zxc==='excellent'?'ممتاز':(d.zxc==='needs-improvement'?'تحسين':'جيد');
+                        
+                        const currentLikes = d.likes || 0;
+                        const isLiked = likedIds.includes(docSnap.id);
+
+                        const likeHTML = `
+                            <button class="btn-like" onclick="handleLike('${docSnap.id}')" ${isLiked ? 'disabled' : ''}>
+                                <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
+                                <span class="like-count">${currentLikes}</span>
+                            </button>`;
+
+                        const deleteActionHTML = isAdmin ? `
+                            <button onclick="handleDelete('${docSnap.id}')" class="btn-delete">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>` : '';
+
+                        let amountText = `${d.asd} ${d.unit}`;
+                        if (targetView === 'reciters' && d.score !== undefined) {
+                            amountText += ` <span style="font-size:0.8rem; color:var(--secondary-color); font-weight:bold;">(${d.score}%)</span>`;
+                        }
+
+                        body.innerHTML += `
+                            <tr>
+                                <td style="font-weight:bold; font-size:0.9rem;">${d.qwe}</td>
+                                <td style="font-size:0.9rem;">${amountText}</td>
+                                <td>
+                                    <div class="rating-wrapper">
+                                        <span class="badge ${badgeClass}">${badgeText}</span>
+                                        ${likeHTML}
+                                    </div>
+                                </td>
+                                <td style="font-size:0.85rem; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${d.nmk||'-'}</td>
+                                <td style="font-size:0.8rem; color:#6B7280;">${t}</td>
+                                <td>${deleteActionHTML}</td>
+                            </tr>`;
+                    }
+                });
+            }
+
+            if(visibleCount === 0) { empty.style.display='block'; table.style.display='none'; }
+            else { empty.style.display='none'; table.style.display='table'; }
+
+            document.getElementById('stat-total').innerText=visibleCount; 
+            document.getElementById('stat-excellent').innerText=e; 
+            document.getElementById('stat-review').innerText=n;
+        }
+
+        // الاستماع لتغييرات قاعدة البيانات
+        onSnapshot(query(collection(db, "daily_records"), orderBy("uoi", "desc")), (snap) => {
+            cachedSnapshot = snap; // حفظ البيانات
+            renderTable(snap, currentView); // تحديث العرض بناءً على الصفحة الحالية
+        });
+
+        function showToast(msg, type) {
+            const c = document.getElementById('toast-container');
+            const t = document.createElement('div');
+            t.className='toast'; 
+            t.style.backgroundColor=type==='success'?'var(--success)':(type==='error'?'var(--danger)':'var(--info)');
+            t.innerHTML = msg;
+            c.appendChild(t);
+            setTimeout(()=>t.remove(), 3000);
+        }
+        
+        document.getElementById('reciter-date').valueAsDate = new Date();
+    </script>
+</body>
+</html>
