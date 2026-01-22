@@ -20,7 +20,7 @@
             --success: #10B981;
             --info: #3B82F6;
             --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow: 0 4px 6px -1px rgba( 0, 0, 0, 0.1), 0 2px 4px -1px rgba( 0, 0, 0, 0.06);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -46,7 +46,7 @@
 
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
         .menu-card { background: var(--card-bg); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; }
-        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: var(--primary-color); }
+        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba( 0, 0, 0, 0.1); border-color: var(--primary-color); }
         .menu-card i { font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem; }
         .menu-card h2 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 0.5rem; }
         .menu-card p { font-size: 0.9rem; color: var(--text-light); }
@@ -54,7 +54,7 @@
         /* --- لوحة التحكم والبيانات --- */
         #dashboard-view { display: none; animation: fadeIn 0.5s ease-in; }
         
-        /* --- قسم تسجيل الدخول (منفصل عن الصفحات) --- */
+        /* --- قسم تسجيل الدخول --- */
         #auth-section { display: none; max-width: 100%; margin: 1rem auto; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; width: 100%; }
         .form-group { margin-bottom: 1rem; text-align: right; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
@@ -63,7 +63,7 @@
 
         /* النماذج */
         #teacher-panel, #reciters-panel { display: none; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2rem; border-right: 5px solid var(--secondary-color); }
-        .input-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .input-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; } /* تصغير الحد الأدنى للعمود لاستيعاب العنصر الجديد */
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
         .stat-card { background: var(--card-bg); padding: 1.2rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; }
@@ -74,8 +74,28 @@
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
         th, td { padding: 0.8rem; text-align: right; border-bottom: 1px solid #E5E7EB; vertical-align: middle; white-space: nowrap; }
         
+        /* زر حذف الطالب */
         .btn-delete { background-color: #FEE2E2; color: #991B1B; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .btn-delete:hover { background-color: #EF4444; color: white; }
+
+        /* زر مسح الكل للصفحة */
+        .btn-delete-all { 
+            background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s; display: none; margin-left: auto; 
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-delete-all:hover { background-color: #DC2626; color: white; border-color: #DC2626; }
+
+        /* شارة نوع المتابعة */
+        .freq-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            background-color: #F3F4F6;
+            color: #6B7280;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-right: 8px;
+            border: 1px solid #E5E7EB;
+        }
 
         .rating-wrapper { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         
@@ -107,6 +127,8 @@
             .rating-wrapper { flex-direction: row; justify-content: space-between; width: 100%; }
             .btn-like { flex-grow: 1; justify-content: center; padding: 0.4rem; }
             .btn-home { display: block; }
+            .btn-delete-all span { display: none; } /* إخفاء النص في الموبايل للتنظيم */
+            .freq-badge { margin-right: 0; margin-bottom: 4px; display: block; width: fit-content; } /* جعل الشارة تحت الاسم في الموبايل */
         }
     </style>
 </head>
@@ -114,7 +136,7 @@
 
     <header>
         <div class="navbar">
-            <div class="logo"><i class="fas fa-quran"></i> <span>منصة مُحفِّظي</span></div>
+            <div class="logo"><i class="fas fa-quran"></i> <span>حلقة علي بن ابي طالب</span></div>
             <div class="nav-actions">
                 <button id="btn-home" class="nav-actions btn-home" onclick="navigateTo('home')">
                     <i class="fas fa-home"></i> الرئيسية
@@ -128,7 +150,7 @@
     </header>
 
     <main>
-        <!-- --- قسم تسجيل الدخول (نقله ليكون خارج الصفحات ليعمل من الرئيسية) --- -->
+        <!-- قسم تسجيل الدخول -->
         <section id="auth-section">
             <h3>تسجيل دخول المعلم</h3>
             <form id="login-form" onsubmit="handleLogin(event)">
@@ -142,8 +164,8 @@
         <!-- 1. الصفحة الرئيسية -->
         <section id="home-view">
             <div class="welcome-hero">
-                <h1>أهلاً بك في منصة مُحفِّظي</h1>
-                <p>المنصة الأولى لمتابعة حفظ ومراجعة القرآن الكريم</p>
+                <h1>مرحبا بك في : حلقة علي بن ابي طالب</h1>
+                <p>الشيخ : معاذ زهير المحمد</p>
             </div>
 
             <div class="cards-grid">
@@ -155,8 +177,8 @@
 
                 <div class="menu-card" onclick="navigateTo('dashboard')">
                     <i class="fas fa-clipboard-list"></i>
-                    <h2>منصة مُحفِّظي</h2>
-                    <p>الجدول اليومي الشامل للمتابعة اليومية (آية / صفحة)</p>
+                    <h2>التقرير/اليومي/الاسبوعي/الشهري.</h2>
+                    <p>الجدول اليومي الشامل للمتابعة</p>
                 </div>
             </div>
         </section>
@@ -167,14 +189,15 @@
 
             <!-- نموذج المتابعة اليومية -->
             <section id="teacher-panel">
-                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">تسجيل متابعة يومية (آية / صفحة)</h3>
+                <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">تسجيل متابعة يومية</h3>
                 <form id="entry-form" onsubmit="handleSubmit(event)">
                     <div class="input-row">
-                        <div class="form-group"><label>اسم الطالب</label><input type="text" id="student-name" class="form-control" placeholder="مثال: أحمد محمد" required></div>
+                        <div class="form-group"><label>اسم الطالب</label><input type="text" id="student-name" class="form-control" placeholder="اسم الطالب" required></div>
+                        <div class="form-group"><label>نوع المتابعة</label><select id="frequency" class="form-control"><option value="daily">يومياً</option><option value="weekly">أسبوعياً</option><option value="monthly">شهرياً</option></select></div>
                         <div class="form-group">
                             <label>المقدار</label>
                             <div style="display:flex; gap:5px;">
-                                <input type="number" id="amount" class="form-control" min="1" placeholder="1" required>
+                                <input type="number" id="amount" class="form-control" min="1" placeholder="0" required>
                                 <select id="unit" class="form-control" style="width:100px;">
                                     <option value="آية">آية</option>
                                     <option value="صفحة">صفحة</option>
@@ -194,6 +217,7 @@
                 <form id="reciters-form" onsubmit="handleRecitersSubmit(event)">
                     <div class="input-row">
                         <div class="form-group"><label>اسم الطالب</label><input type="text" id="reciter-name" class="form-control" placeholder="اسم الطالب" required></div>
+                        <div class="form-group"><label>نوع المتابعة</label><select id="reciter-frequency" class="form-control"><option value="monthly">شهرياً</option><option value="weekly">أسبوعياً</option><option value="daily">يومياً</option></select></div>
                         <div class="form-group"><label>عدد الأجزاء</label><input type="number" id="reciter-amount" class="form-control" min="1" placeholder="عدد الأجزاء" required></div>
                         <div class="form-group"><label>الدرجة من 100%</label><input type="number" id="reciter-score" class="form-control" min="0" max="100" placeholder="100" required></div>
                         <div class="form-group"><label>التقييم</label><select id="reciter-level" class="form-control" required><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="needs-improvement">يحتاج تحسين</option></select></div>
@@ -211,8 +235,12 @@
 
             <section>
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                    <h3 style="font-size: 1.1rem;">السجل</h3>
-                    <small style="color:var(--text-light);">اسحب الجدول لليمين للرؤية</small>
+                    <button id="btn-clear-all" onclick="handleClearAll()" class="btn-delete-all">
+                        <i class="fas fa-trash-alt"></i>
+                        <span id="btn-clear-text">مسح جميع البيانات</span>
+                    </button>
+                    
+                    <h3 style="font-size: 1.1rem; margin-right: 10px;">السجل</h3>
                 </div>
                 <div class="table-container">
                     <table id="records-table">
@@ -240,7 +268,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc, updateDoc, increment, Timestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, doc, deleteDoc, updateDoc, increment, Timestamp, writeBatch } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyDym9mjGHbqwhAkZk1TcM6_iNi2yAjyztc",
@@ -260,7 +288,6 @@
         let currentView = 'home'; // home, dashboard, reciters
         let cachedSnapshot = null; 
 
-        // --- دالة التنقل المحسنة ---
         window.navigateTo = (view) => {
             const homeView = document.getElementById('home-view');
             const dashboardView = document.getElementById('dashboard-view');
@@ -269,10 +296,10 @@
             const teacherPanel = document.getElementById('teacher-panel');
             const recitersPanel = document.getElementById('reciters-panel');
             const authSection = document.getElementById('auth-section');
+            const clearAllBtn = document.getElementById('btn-clear-all');
+            const clearAllText = document.getElementById('btn-clear-text');
 
-            // إخفاء Auth Section إذا كان ظاهراً
             authSection.style.display = 'none';
-
             currentView = view;
 
             if (view === 'home') {
@@ -286,6 +313,7 @@
                 dashboardView.style.display = 'block';
                 homeBtn.style.display = 'block';
                 pageTitle.textContent = 'المختبرون في الأجزاء لهذا الشهر';
+                clearAllText.textContent = 'مسح سجل المختبرين لهذا الشهر';
                 updateFormVisibility(auth.currentUser);
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'reciters');
             } else if (view === 'dashboard') {
@@ -293,30 +321,27 @@
                 dashboardView.style.display = 'block';
                 homeBtn.style.display = 'block';
                 pageTitle.textContent = 'منصة المتابعة اليومية (آية / صفحة)';
+                clearAllText.textContent = 'مسح سجل المتابعة اليومية';
                 updateFormVisibility(auth.currentUser);
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'dashboard');
             }
+            updateClearButtonVisibility();
         };
 
-        // --- دالة تبديل نموذج الدخول (إصلاح المشكلة) ---
+        // --- دالة تبديل نموذج الدخول ---
         window.toggleAuthModal = () => {
             const authSection = document.getElementById('auth-section');
             const homeView = document.getElementById('home-view');
             const dashboardView = document.getElementById('dashboard-view');
             
-            // التحقق من حالة الظهور
             const isHidden = authSection.style.display === 'none' || authSection.style.display === '';
 
             if (isHidden) {
-                // فتح نموذج الدخول
                 authSection.style.display = 'block';
-                // إخفاء الصفحات الأخرى لتجنب التداخل البصري
                 homeView.style.display = 'none';
                 dashboardView.style.display = 'none';
             } else {
-                // إغلاق نموذج الدخول (الضغط على إلغاء)
                 authSection.style.display = 'none';
-                // العودة للصفحة المناسبة
                 if (auth.currentUser) {
                     navigateTo('dashboard');
                 } else {
@@ -325,9 +350,18 @@
             }
         };
 
+        // --- تحديث ظهور الأزرار ---
+        const updateClearButtonVisibility = () => {
+            const isAdmin = auth.currentUser !== null;
+            const clearBtn = document.getElementById('btn-clear-all');
+            if(isAdmin) clearBtn.style.display = 'flex';
+            else clearBtn.style.display = 'none';
+        }
+
         const updateFormVisibility = (user) => {
             const teacherPanel = document.getElementById('teacher-panel');
             const recitersPanel = document.getElementById('reciters-panel');
+            const actionsHeader = document.getElementById('th-actions');
             
             teacherPanel.style.display = 'none';
             recitersPanel.style.display = 'none';
@@ -338,23 +372,24 @@
                 } else if (currentView === 'dashboard') {
                     teacherPanel.style.display = 'block';
                 }
+                actionsHeader.style.display = 'table-cell'; 
+            } else {
+                actionsHeader.style.display = 'none'; 
             }
+            updateClearButtonVisibility();
         }
 
         onAuthStateChanged(auth, (user) => {
             const loginBtn = document.getElementById('btn-login-nav');
             const logoutBtn = document.getElementById('btn-logout');
             const userDisplay = document.getElementById('user-display');
-            const actionsHeader = document.getElementById('th-actions');
 
             if(user) {
                 loginBtn.style.display = 'none';
                 logoutBtn.style.display = 'inline-block';
                 userDisplay.style.display = 'inline-block';
                 userDisplay.textContent = `مرحباً`;
-                actionsHeader.style.display = 'table-cell'; 
                 updateFormVisibility(user);
-                // إذا كان المستخدم مسجل دخول وهو على صفحة الدخول، وجهه للداشبورد
                 if(document.getElementById('auth-section').style.display === 'block'){
                     navigateTo('dashboard');
                 }
@@ -362,7 +397,6 @@
                 loginBtn.style.display = 'inline-block';
                 logoutBtn.style.display = 'none';
                 userDisplay.style.display = 'none';
-                actionsHeader.style.display = 'none'; 
                 updateFormVisibility(null);
             }
         });
@@ -375,7 +409,6 @@
                 await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
                 showToast('تم تسجيل الدخول', 'success');
                 document.getElementById('login-form').reset();
-                // التوجيه للداشبورد بعد الدخول الناجح
                 navigateTo('dashboard');
             } catch(err) { showToast('خطأ: '+err.message, 'error'); }
             l.style.display = 'none';
@@ -384,7 +417,7 @@
         window.handleLogout = () => { 
             signOut(auth); 
             showToast('تم الخروج', 'info');
-            navigateTo('home'); // العودة للرئيسية بعد الخروج
+            navigateTo('home');
         };
 
         // --- دالة حفظ المختبرين ---
@@ -395,6 +428,7 @@
             const score = document.getElementById('reciter-score').value;
             const level = document.getElementById('reciter-level').value;
             const dateStr = document.getElementById('reciter-date').value;
+            const frequency = document.getElementById('reciter-frequency').value; // الجديد
             
             const btn = e.target.querySelector('button');
             const old = btn.innerHTML;
@@ -416,6 +450,7 @@
                     zxc: level, 
                     nmk: 'اختبار أجزاء',
                     uoi: ts,
+                    frequency: frequency, // الجديد
                     likes: 0 
                 });
                 showToast('تم حفظ المختبر', 'success');
@@ -433,6 +468,8 @@
             btn.innerHTML = '<span class="loader"></span> جاري الحفظ...';
             try {
                 const selectedUnit = document.getElementById('unit').value; 
+                const frequency = document.getElementById('frequency').value; // الجديد
+
                 await addDoc(collection(db, "daily_records"), {
                     qwe: document.getElementById('student-name').value,
                     asd: parseInt(document.getElementById('amount').value),
@@ -440,6 +477,7 @@
                     zxc: document.getElementById('level').value,
                     nmk: document.getElementById('notes').value,
                     uoi: serverTimestamp(),
+                    frequency: frequency, // الجديد
                     likes: 0 
                 });
                 showToast('تم الحفظ', 'success');
@@ -468,12 +506,67 @@
             }
         };
 
+        window.handleClearAll = async () => {
+            if (confirm('هل أنت متأكد من مسح جميع البيانات الظاهرة في هذه الصفحة؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                if (!cachedSnapshot) return;
+
+                const batch = writeBatch(db);
+                let count = 0;
+                const now = new Date();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
+
+                cachedSnapshot.forEach(docSnap => {
+                    const d = docSnap.data();
+                    const docDate = d.uoi ? d.uoi.toDate() : null;
+                    let isVisible = false;
+
+                    if (currentView === 'reciters') {
+                        if (d.unit === 'جزء') {
+                            if (!docDate || (docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear)) {
+                                isVisible = true;
+                            }
+                        }
+                    } else if (currentView === 'dashboard') {
+                        if (d.unit !== 'جزء') {
+                            isVisible = true;
+                        }
+                    }
+
+                    if (isVisible) {
+                        batch.delete(docSnap.ref);
+                        count++;
+                    }
+                });
+
+                if (count > 0) {
+                    try {
+                        await batch.commit();
+                        showToast(`تم مسح ${count} سجل بنجاح`, 'success');
+                    } catch(err) {
+                        console.error(err);
+                        showToast('فشل المسح', 'error');
+                    }
+                } else {
+                    showToast('لا توجد بيانات لمسحها', 'info');
+                }
+            }
+        };
+
+        // --- دالة مساعدة لترجمة القيمة ---
+        function getFrequencyLabel(val) {
+            if(val === 'daily') return 'يومياً';
+            if(val === 'weekly') return 'أسبوعياً';
+            if(val === 'monthly') return 'شهرياً';
+            return '';
+        }
+
         // --- دالة رسم الجدول ---
         function renderTable(snap, targetView) {
             const body = document.getElementById('records-body');
             const empty = document.getElementById('empty-msg');
             const table = document.getElementById('records-table');
-            body.innerHTML = ''; // مسح الجدول تماماً
+            body.innerHTML = ''; 
             let s=0, e=0, n=0;
             
             const isAdmin = auth.currentUser !== null;
@@ -485,71 +578,80 @@
 
             let visibleCount = 0;
 
-            snap.forEach(docSnap => {
-                const d = docSnap.data();
-                const docDate = d.uoi ? d.uoi.toDate() : null;
-                
-                let isVisible = false;
+            if(snap.empty) { empty.style.display='block'; table.style.display='none'; }
+            else {
+                empty.style.display='none'; table.style.display='table';
+                snap.forEach(docSnap => {
+                    const d = docSnap.data();
+                    const docDate = d.uoi ? d.uoi.toDate() : null;
+                    
+                    let isVisible = false;
 
-                // منطق الفصل الصارم
-                if (targetView === 'reciters') {
-                    if (d.unit === 'جزء') {
-                        if (!docDate) { isVisible = true; }
-                        else {
-                            if (docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear) {
-                                isVisible = true;
+                    if (targetView === 'reciters') {
+                        if (d.unit === 'جزء') {
+                            if (!docDate) { isVisible = true; }
+                            else {
+                                if (docDate.getMonth() === currentMonth && docDate.getFullYear() === currentYear) {
+                                    isVisible = true;
+                                }
                             }
                         }
-                    }
-                } else if (targetView === 'dashboard') {
-                    if (d.unit !== 'جزء') {
-                        isVisible = true;
-                    }
-                }
-
-                if (isVisible) {
-                    visibleCount++;
-                    if(d.zxc==='excellent') e++; else if(d.zxc==='needs-improvement') n++;
-                    
-                    const t = docDate ? new Intl.DateTimeFormat('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }).format(docDate) : '';
-                    const badgeClass = d.zxc==='excellent'?'badge-excellent':(d.zxc==='needs-improvement'?'badge-needs-improvement':'badge-good');
-                    const badgeText = d.zxc==='excellent'?'ممتاز':(d.zxc==='needs-improvement'?'تحسين':'جيد');
-                    
-                    const currentLikes = d.likes || 0;
-                    const isLiked = likedIds.includes(docSnap.id);
-
-                    const likeHTML = `
-                        <button class="btn-like" onclick="handleLike('${docSnap.id}')" ${isLiked ? 'disabled' : ''}>
-                            <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
-                            <span class="like-count">${currentLikes}</span>
-                        </button>`;
-
-                    const deleteActionHTML = isAdmin ? `
-                        <button onclick="handleDelete('${docSnap.id}')" class="btn-delete">
-                            <i class="fas fa-trash"></i> حذف
-                        </button>` : '';
-
-                    let amountText = `${d.asd} ${d.unit}`;
-                    if (targetView === 'reciters' && d.score !== undefined) {
-                        amountText += ` <span style="font-size:0.8rem; color:var(--secondary-color); font-weight:bold;">(${d.score}%)</span>`;
+                    } else if (targetView === 'dashboard') {
+                        if (d.unit !== 'جزء') {
+                            isVisible = true;
+                        }
                     }
 
-                    body.innerHTML += `
-                        <tr>
-                            <td style="font-weight:bold; font-size:0.9rem;">${d.qwe}</td>
-                            <td style="font-size:0.9rem;">${amountText}</td>
-                            <td>
-                                <div class="rating-wrapper">
-                                    <span class="badge ${badgeClass}">${badgeText}</span>
-                                    ${likeHTML}
-                                </div>
-                            </td>
-                            <td style="font-size:0.85rem; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${d.nmk||'-'}</td>
-                            <td style="font-size:0.8rem; color:#6B7280;">${t}</td>
-                            <td>${deleteActionHTML}</td>
-                        </tr>`;
-                }
-            });
+                    if (isVisible) {
+                        visibleCount++;
+                        if(d.zxc==='excellent') e++; else if(d.zxc==='needs-improvement') n++;
+                        
+                        const t = docDate ? new Intl.DateTimeFormat('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' }).format(docDate) : '';
+                        const badgeClass = d.zxc==='excellent'?'badge-excellent':(d.zxc==='needs-improvement'?'badge-needs-improvement':'badge-good');
+                        const badgeText = d.zxc==='excellent'?'ممتاز':(d.zxc==='needs-improvement'?'تحسين':'جيد');
+                        
+                        const currentLikes = d.likes || 0;
+                        const isLiked = likedIds.includes(docSnap.id);
+
+                        const likeHTML = `
+                            <button class="btn-like" onclick="handleLike('${docSnap.id}')" ${isLiked ? 'disabled' : ''}>
+                                <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i>
+                                <span class="like-count">${currentLikes}</span>
+                            </button>`;
+
+                        const deleteActionHTML = isAdmin ? `
+                            <button onclick="handleDelete('${docSnap.id}')" class="btn-delete">
+                                <i class="fas fa-trash"></i> حذف
+                            </button>` : '';
+
+                        let amountText = `${d.asd} ${d.unit}`;
+                        if (targetView === 'reciters' && d.score !== undefined) {
+                            amountText += ` <span style="font-size:0.8rem; color:var(--secondary-color); font-weight:bold;">(${d.score}%)</span>`;
+                        }
+
+                        // إضافة شارة نوع المتابعة
+                        const freqBadge = d.frequency ? `<span class="freq-badge">${getFrequencyLabel(d.frequency)}</span>` : '';
+
+                        body.innerHTML += `
+                            <tr>
+                                <td style="font-weight:bold; font-size:0.9rem;">
+                                    ${freqBadge}
+                                    ${d.qwe}
+                                </td>
+                                <td style="font-size:0.9rem;">${amountText}</td>
+                                <td>
+                                    <div class="rating-wrapper">
+                                        <span class="badge ${badgeClass}">${badgeText}</span>
+                                        ${likeHTML}
+                                    </div>
+                                </td>
+                                <td style="font-size:0.85rem; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${d.nmk||'-'}</td>
+                                <td style="font-size:0.8rem; color:#6B7280;">${t}</td>
+                                <td>${deleteActionHTML}</td>
+                            </tr>`;
+                    }
+                });
+            }
 
             if(visibleCount === 0) { empty.style.display='block'; table.style.display='none'; }
             else { empty.style.display='none'; table.style.display='table'; }
