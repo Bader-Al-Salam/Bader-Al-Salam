@@ -29,12 +29,13 @@
 
         header { background-color: var(--card-bg); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; padding: 0.5rem 0; }
         .navbar { max-width: 1200px; margin: 0 auto; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .logo { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; }
+        .logo { font-size:1.2rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; }
         .nav-actions { display: flex; align-items: center; gap: 10px; }
-        .nav-actions button { background: none; border: none; cursor: pointer; font-size: 0.9rem; color: var(--text-main); font-weight: 600; transition: color 0.3s;}
-        .nav-actions button:hover { color: var(--primary-color); }
-        .btn-home { color: var(--text-main) !important; border: 1px solid #E5E7EB; padding: 0.4rem 0.8rem; border-radius: 20px; display: none; }
-        .btn-login { background-color: var(--primary-color) !important; color: white !important; padding: 0.4rem 1rem; border-radius: 20px; }
+        .nav-actions button { background: none; border: none; cursor: pointer; font-size: 0.9rem; color: var(--text-main); font-weight: 600; transition: color 0.3s; padding: 0.4rem 0.8rem; border-radius: 20px;}
+        .nav-actions button:hover { color: var(--primary-color); background-color: #f3f4f6; }
+        .btn-home { color: var(--text-main) !important; border: 1px solid #E5E7EB; display: none; }
+        .btn-login { background-color: var(--primary-color) !important; color: white !important; }
+        .btn-dev-info { color: var(--info) !important; background-color: #EFF6FF !important; border:1px solid #DBEAFE; }
 
         main { max-width: 1200px; margin: 1rem auto; padding: 0 1rem; position: relative; }
 
@@ -49,7 +50,7 @@
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
         
         .menu-card { background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 150px; }
-        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: var(--primary-color); }
+        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0,0,0, 0.1); border-color: var(--primary-color); }
         .menu-card i { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 0.5rem; }
         .menu-card h2 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem; }
         .menu-card p { font-size: 0.85rem; color: var(--text-light); }
@@ -104,6 +105,18 @@
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
         th, td { padding: 0.8rem; text-align: right; border-bottom: 1px solid #E5E7EB; vertical-align: middle; white-space: nowrap; }
         
+        /* تنسيق شارة المجموع الجديدة */
+        .total-badge {
+            background-color: #E0F2FE;
+            color: #0369A1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 5px;
+            display: inline-block;
+        }
+
         .btn-delete { background-color: #FEE2E2; color: #991B1B; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .btn-delete:hover { background-color: #EF4444; color: white; }
 
@@ -174,6 +187,87 @@
 
         .btn-cancel-edit { background-color: #9CA3AF; color: white; width: auto; display: none; padding: 0.8rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; }
 
+        /* --- تصميم النافذة المنبثقة للمطور --- */
+        #dev-info-modal {
+            display: none; 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.3s;
+        }
+        .close-modal:hover { color: var(--danger); }
+
+        .dev-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 2.5rem;
+            border: 4px solid white;
+            box-shadow: var(--shadow);
+        }
+
+        .dev-name { font-size: 1.4rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem; }
+        .dev-role { font-size: 0.95rem; color: var(--text-light); margin-bottom: 1.5rem; }
+
+        .dev-details {
+            text-align: right;
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .dev-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+        }
+        .dev-item:last-child { margin-bottom: 0; }
+        .dev-item i { color: var(--primary-color); width: 20px; }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
         @media (max-width: 768px) {
             .logo { font-size: 1rem; }
             .stat-value { font-size: 1.8rem; }
@@ -181,19 +275,17 @@
             .rating-wrapper { flex-direction: row; justify-content: space-between; width: 100%; }
             .btn-like { flex-grow: 1; justify-content: center; padding: 0.4rem; }
             .btn-home { display: block; }
-            .btn-delete-all span, .btn-separator span { display: none; }
+            .nav-actions span { display: none; }
+            .nav-actions button i { margin: 0; font-size: 1.2rem; }
 
-            /* تعديل البطاقات الرئيسية للموبايل */
             .cards-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 1rem; }
             .menu-card { padding: 0.8rem 0.5rem; min-height: 120px; }
             .menu-card i { font-size: 1.6rem; margin-bottom: 0.4rem; }
             .menu-card h2 { font-size: 0.85rem; margin-bottom: 0.2rem; }
             .menu-card p { font-size: 0.7rem; line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-            /* تعديل بطاقات المتابعة الداخلية للموبايل */
-            .tracking-grid { grid-template-columns: 1fr; /* عمود واحد للموبايل */ }
+            .tracking-grid { grid-template-columns: 1fr; }
 
-            /* تعديل حجم النماذج */
             #teacher-panel, #reciters-panel, #stages-panel { padding: 1rem; margin-bottom: 1.5rem; }
             .form-group { margin-bottom: 0.6rem; }
             .form-group label { font-size: 0.85rem; margin-bottom: 0.3rem; }
@@ -209,12 +301,17 @@
             <div class="logo"><i class="fas fa-quran"></i> <span>حلقة علي بن ابي طالب</span></div>
             <div class="nav-actions">
                 <button id="btn-home" class="nav-actions btn-home" onclick="navigateTo('home')">
-                    <i class="fas fa-home"></i> الرئيسية
+                    <i class="fas fa-home"></i> <span>الرئيسية</span>
                 </button>
                 
+                <!-- زر معلومات المطور -->
+                <button class="btn-dev-info" onclick="toggleDevInfo()">
+                    <i class="fas fa-user-tie"></i> <span>عن المطور</span>
+                </button>
+
                 <span id="user-display" style="display:none; font-weight:600; font-size: 0.9rem;"></span>
-                <button id="btn-logout" onclick="handleLogout()" style="display:none; color:var(--danger);">خروج</button>
-                <button id="btn-login-nav" class="btn-login" onclick="toggleAuthModal()">دخول المعلم</button>
+                <button id="btn-logout" onclick="handleLogout()" style="display:none; color:var(--danger);"><i class="fas fa-sign-out-alt"></i></button>
+                <button id="btn-login-nav" class="btn-login" onclick="toggleAuthModal()"><i class="fas fa-sign-in-alt"></i> <span>دخول المعلم</span></button>
             </div>
         </div>
     </header>
@@ -280,10 +377,10 @@
             <section id="teacher-panel">
                 <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">تسجيل متابعة جديدة</h3>
                 <form id="entry-form" onsubmit="handleSubmit(event)">
-                    <div class="form-group"><label>اسم الطالب</label><input type="text" id="student-name" class="form-control" placeholder="مثال: أحمد محمد" required></div>
+                    <div class="form-group"><label>اسم الطالب</label><input type="text" id="student-name" class="form-control" placeholder="اسم الطالب" required></div>
                     
-                    <!-- الحقول الجديدة: من وإلى والمجموع -->
-                    <div class="input-row">
+                    <!-- الحقول للمتابعة اليومية والأسبوعية (من، إلى، المجموع) -->
+                    <div id="range-inputs" class="input-row">
                         <div class="form-group">
                             <label>من</label>
                             <input type="number" id="amount-from" class="form-control" placeholder="رقم الصفحة" oninput="calculateTotal()" required>
@@ -296,6 +393,12 @@
                             <label>المجموع</label>
                             <input type="number" id="amount-total" class="form-control" readonly style="background-color: #f9fafb; font-weight:bold; color:var(--primary-color);">
                         </div>
+                    </div>
+
+                    <!-- الحقل الجديد للمتابعة الشهرية (نص فقط) -->
+                    <div id="monthly-input" class="form-group" style="display:none;">
+                        <label>المجموع</label>
+                        <input type="text" id="monthly-text" class="form-control" placeholder="اكتب الوصف هنا (مثال: تسميع الجزء الأول، مراجعة...)">
                     </div>
 
                     <input type="hidden" id="frequency" value="daily">
@@ -327,7 +430,11 @@
                 <form id="reciters-form" onsubmit="handleRecitersSubmit(event)">
                     <div class="input-row">
                         <div class="form-group"><label>اسم الطالب</label><input type="text" id="reciter-name" class="form-control" placeholder="اسم الطالب" required></div>
-                        <div class="form-group"><label>عدد الأجزاء</label><input type="number" id="reciter-amount" class="form-control" min="1" placeholder="عدد الأجزاء" required></div>
+                        <!-- الحقل المعدل -->
+                        <div class="form-group">
+                            <label>الجزء</label>
+                            <input type="text" id="reciter-amount" class="form-control" placeholder="اكتب اسم الجزء هنا..." required>
+                        </div>
                         <div class="form-group"><label>الدرجة من 100%</label><input type="number" id="reciter-score" class="form-control" min="0" max="100" placeholder="100" required></div>
                         <div class="form-group"><label>التقييم</label><select id="reciter-level" class="form-control" required><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="needs-improvement">يحتاج تحسين</option></select></div>
                     </div>
@@ -420,6 +527,34 @@
         </section>
     </main>
 
+    <!-- النافذة المنبثقة للمطور -->
+    <div id="dev-info-modal" onclick="if(event.target === this) toggleDevInfo()">
+        <div class="modal-content">
+            <button class="close-modal" onclick="toggleDevInfo()">&times;</button>
+            
+            <div class="dev-avatar"><i class="fas fa-laptop-code"></i></div>
+            <h3 class="dev-name">Abdulrahman Al Dawood</h3>
+            <p class="dev-role">مطور ومصمم المنصة</p>
+
+            <div class="dev-details">
+                <div class="dev-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>abdulrahmanfzfz@gmail.com</span>
+                </div>
+                <div class="dev-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>ادلب سوريا</span>
+                </div>
+                <div class="dev-item">
+                    <i class="fas fa-code-branch"></i>
+                    <span>الإصدار 1.0.0</span>
+                </div>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-light); margin-top: 1rem;">جميع الحقوق محفوظة &copy; 2023</p>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
 
     <script type="module">
@@ -457,6 +592,16 @@
             partsSelect.appendChild(option);
         }
 
+        // دالة فتح/إغلاق نافذة المطور
+        window.toggleDevInfo = () => {
+            const modal = document.getElementById('dev-info-modal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+            } else {
+                modal.style.display = 'flex';
+            }
+        }
+
         window.handleStagesUnitChange = function() {
             const val = this.value;
             const amountInput = document.getElementById('stages-amount');
@@ -469,21 +614,37 @@
             selectedTrackingFreq = freq;
             document.getElementById('frequency').value = freq;
             
-            // التعديل: إخفاء حقول "من-إلى" إذا كان التكرار شهرياً (لأن الشهري ليس صفحات عادة)
-            const amountInputs = document.querySelectorAll('.input-row .form-group'); 
-            // نختار العنصر الذي يحتوي على "من" و "إلى" لإخفائه في الشهري إن أردت، 
-            // لكن الطلب كان في اليومية والأسبوعية.
-            // سأبقيها ظاهرة في اليومية والأسبوعية فقط.
-            
             const attendanceGroup = document.getElementById('attendance-group');
+            const rangeInputs = document.getElementById('range-inputs');
+            const monthlyInput = document.getElementById('monthly-input');
+            
+            // عناصر الإدخال
+            const fromInput = document.getElementById('amount-from');
+            const toInput = document.getElementById('amount-to');
+            const monthlyTextInput = document.getElementById('monthly-text');
+
             if (freq === 'monthly') {
-                // في الشهري قد نحتاج نظام مختلف (الأجزاء)، لذا نستبعد حقول الصفحات أو نظهرها حسب الحاجة
-                // حالياً سنتركها ولكن المستخدم سيتجنبها، أو يمكن إخفاء الصف المخصص للصفحات.
-                // لأغراض التنظيم، سنخفي صف "من-إلى" فقط في حالة الشهري إذا كان مخصصاً للصفحات.
-                // لكن بما أن الكود واحد، سأتركها للمستخدم ليتحكم.
                 attendanceGroup.style.display = 'none';
+                rangeInputs.style.display = 'none'; // إخفاء حقول من-إلى
+                monthlyInput.style.display = 'block'; // إظهار حقل النص
+                
+                // إزالة التحقق الإجباري من الحقول المخفية
+                fromInput.removeAttribute('required');
+                toInput.removeAttribute('required');
+                // جعل حقل النص إجبارياً
+                monthlyTextInput.setAttribute('required', 'true');
+                monthlyTextInput.placeholder = "اكتب الوصف هنا (إجباري)...";
+
             } else {
                 attendanceGroup.style.display = 'block';
+                rangeInputs.style.display = 'grid'; // إظهار حقول من-إلى
+                monthlyInput.style.display = 'none'; // إخفاء حقل النص
+                
+                // إعادة التحقق الإجباري لحقول الأرقام
+                fromInput.setAttribute('required', 'true');
+                toInput.setAttribute('required', 'true');
+                // إزالة التحقق الإجباري من حقل النص
+                monthlyTextInput.removeAttribute('required');
             }
 
             let title = '';
@@ -496,20 +657,18 @@
 
         // دالة حساب المجموع
         window.calculateTotal = () => {
-            const from = parseFloat(document.getElementById('amount-from').value) || 0;
-            const to = parseFloat(document.getElementById('amount-to').value) || 0;
+            const from = parseFloat(document.getElementById('amount-from').value) ||0;
+            const to = parseFloat(document.getElementById('amount-to').value) ||0;
             let total = 0;
 
             if (to > from) {
                 total = to - from;
             }
             
-            // يمكن إضافة منطق إذا كان من > إلى (سالب)
-            // سنكتفي بوضع الفرق
             document.getElementById('amount-total').value = total;
         }
 
-        // دالة وضع خط الفصل (بدل التبديل)
+        // دالة وضع خط الفصل
         window.addSeparatorLine = async () => {
             if(!confirm('هل تريد وضع خط أحمر للفصل هنا؟ سيظهر الخط بين البيانات، وستظهر أي بيانات جديدة فوقه.')) return;
             
@@ -704,7 +863,7 @@
 
                 const dataPayload = {
                     qwe: name,
-                    asd: parseInt(amount),
+                    asd: amount,
                     unit: 'جزء', 
                     score: parseInt(score), 
                     zxc: level, 
@@ -765,7 +924,7 @@
             btn.innerHTML = old;
         };
 
-        // دالة حفظ المتابعة (مع التعديل الجديد لمن وإلى)
+        // دالة حفظ المتابعة
         window.handleSubmit = async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
@@ -777,21 +936,15 @@
                 let asdVal = 0;
                 let asdText = "";
 
-                if (frequency === 'daily' || frequency === 'weekly') {
+                if (frequency === 'monthly') {
+                    const monthlyTextVal = document.getElementById('monthly-text').value;
+                    asdText = monthlyTextVal;
+                    asdVal = 1; 
+                } else {
                     const from = document.getElementById('amount-from').value;
                     const to = document.getElementById('amount-to').value;
                     const total = document.getElementById('amount-total').value;
                     
-                    asdVal = parseInt(total) || 0;
-                    asdText = `من ${from} إلى ${to}`;
-                } else {
-                    // للمتابعة الشهرية التي قد لا تستخدم النظام الجديد، يمكن تركها فارغة أو استخدام حقل منفصل
-                    // لكن بما أننا شيلنا حقل المقدار القديم، سنضطر للتعامل معها
-                    // لهذا الكود سأفترض أن الشهري في هذه الصفحة يحتاج حقول من/إلى أيضاً أو نعيد الحقل القديم
-                    // لتبسيط الأمر، سنستخدم منطق الصفحات لكل شيء في teacher-panel
-                    const from = document.getElementById('amount-from').value;
-                    const to = document.getElementById('amount-to').value;
-                    const total = document.getElementById('amount-total').value;
                     asdVal = parseInt(total) || 0;
                     asdText = `من ${from} إلى ${to}`;
                 }
@@ -807,8 +960,7 @@
                     likes: 0 
                 };
 
-                // حفظ القيم الفردية للصفحات لتسهيل التعديل
-                if(frequency !== 'monthly' || true) { // دائماً احفظها إذا وجدت
+                if(frequency !== 'monthly') { 
                      dataPayload.page_from = parseInt(document.getElementById('amount-from').value) || 0;
                      dataPayload.page_to = parseInt(document.getElementById('amount-to').value) || 0;
                 }
@@ -825,12 +977,15 @@
                     dataPayload.uoi = serverTimestamp();
                     await addDoc(collection(db, "daily_records"), dataPayload);
                     showToast('تم الحفظ', 'success');
-                    document.getElementById('entry-form').reset();
-                    document.getElementById('amount-total').value = ""; // تصفير المجموع
-                    document.getElementById('frequency').value = selectedTrackingFreq;
-                    document.getElementById('attendance').value = 'present';
-                    if(selectedTrackingFreq !== 'monthly') {
-                        document.getElementById('attendance-group').style.display = 'block';
+                    if (frequency === 'monthly') {
+                        document.getElementById('monthly-text').value = "";
+                        document.getElementById('student-name').value = "";
+                        document.getElementById('notes').value = "";
+                        document.getElementById('level').value = "excellent";
+                    } else {
+                        document.getElementById('entry-form').reset();
+                        document.getElementById('amount-total').value = "";
+                        document.getElementById('attendance').value = 'present';
                     }
                 }
             } catch(err) { showToast('فشل الحفظ', 'error'); }
@@ -879,22 +1034,24 @@
             } 
             else {
                 openTracking(data.frequency);
-                document.getElementById('student-name').value = data.qwe;
                 
-                // التعديل: ملء حقول من وإلى
-                if (data.page_from !== undefined && data.page_to !== undefined) {
-                    document.getElementById('amount-from').value = data.page_from;
-                    document.getElementById('amount-to').value = data.page_to;
-                    document.getElementById('amount-total').value = data.page_to - data.page_from;
-                } else {
-                    // بيانات قديمة لا تحتوي على حقول من/إلى منفصلة
-                    // نضع المجموع فقط ونترك من وإلى فارغين أو نحاول التقسيم (صعب)
-                    document.getElementById('amount-total').value = data.asd;
-                }
-
+                document.getElementById('student-name').value = data.qwe;
                 document.getElementById('level').value = data.zxc;
                 document.getElementById('notes').value = data.nmk || '';
+                
                 if (data.attr) document.getElementById('attendance').value = data.attr;
+                
+                if (data.frequency === 'monthly') {
+                    document.getElementById('monthly-text').value = data.asdText || '';
+                } else {
+                    if (data.page_from !== undefined && data.page_to !== undefined) {
+                        document.getElementById('amount-from').value = data.page_from;
+                        document.getElementById('amount-to').value = data.page_to;
+                        document.getElementById('amount-total').value = data.page_to - data.page_from;
+                    } else if (data.asd) {
+                        document.getElementById('amount-total').value = data.asd;
+                    }
+                }
                 
                 toggleEditButton('#btn-submit-entry', 'حفظ التعديلات', '#btn-cancel-entry');
             }
@@ -916,7 +1073,8 @@
             document.getElementById('entry-form').reset();
             document.getElementById('reciters-form').reset();
             document.getElementById('stages-form').reset();
-            document.getElementById('amount-total').value = ""; // تنظيف المجموع
+            document.getElementById('amount-total').value = "";
+            document.getElementById('monthly-text').value = "";
 
             document.querySelectorAll('.btn-cancel-edit').forEach(btn => btn.style.display = 'none');
 
@@ -926,6 +1084,16 @@
             
             document.getElementById('reciter-date').valueAsDate = new Date();
             document.getElementById('stages-amount').value = '1';
+            
+            if(currentView === 'dashboard') {
+                document.getElementById('attendance').value = 'present';
+                if(selectedTrackingFreq === 'monthly') {
+                    document.getElementById('monthly-text').value = "";
+                } else {
+                    document.getElementById('amount-from').value = "";
+                    document.getElementById('amount-to').value = "";
+                }
+            }
         }
 
         window.handleDelete = async (id) => {
@@ -938,7 +1106,6 @@
             }
         };
 
-        // دالة مسح جميع بيانات الصفحة الحالية
         window.handleClearAll = async () => {
             if (confirm('هل أنت متأكد من مسح جميع البيانات الظاهرة في هذه الصفحة؟')) {
                 if (!cachedSnapshot) return;
@@ -988,7 +1155,7 @@
             }
         };
 
-        // دالة رسم الجدول (مع معالجة خط الفصل والنصوص الجديدة)
+        // دالة رسم الجدول (مع إضافة عرض المجموع)
         function renderTable(snap, targetView) {
             const body = document.getElementById('records-body');
             const empty = document.getElementById('empty-msg');
@@ -1011,7 +1178,6 @@
                 snap.forEach(docSnap => {
                     const d = docSnap.data();
                     
-                    // 1. معالجة الفواصل (Separators)
                     if (d.type === 'separator') {
                         body.innerHTML += `
                             <tr class="separator-row">
@@ -1025,13 +1191,19 @@
                         return;
                     }
 
-                    // 2. معالجة البيانات العادية
                     const docDate = d.uoi ? d.uoi.toDate() : null;
                     let isVisible = false;
                     let displayAmountText = "";
                     
-                    // التعديل: عرض النص "من X إلى Y" إذا وجد، أو النص القديم
-                    if (d.asdText) {
+                    // التعديل الجديد: عرض النص + الرقم لليومي والأسبوعي
+                    if ((d.frequency === 'daily' || d.frequency === 'weekly') && d.asdText) {
+                        // التحقق من وجود الرقم في d.asd
+                        const totalNumber = d.asd !== undefined ? d.asd : 0;
+                        // إضافة الشارة مع الرقم
+                        displayAmountText = `${d.asdText} <span class="total-badge">(${totalNumber})</span>`;
+                    } 
+                    else if (d.asdText) {
+                        // للمتابعة الشهرية (نص فقط) أو البيانات القديمة
                         displayAmountText = d.asdText; 
                     } else if (d.asd || d.unit) {
                         displayAmountText = `${d.asd || ''} ${d.unit || ''}`.trim(); 
@@ -1115,7 +1287,6 @@
             document.getElementById('stat-review').innerText=n;
         }
 
-        // الاستماع لتغييرات قاعدة البيانات
         onSnapshot(query(collection(db, "daily_records"), orderBy("uoi", "desc")), (snap) => {
             cachedSnapshot = snap; 
             renderTable(snap, currentView);
@@ -1126,7 +1297,6 @@
             const t = document.createElement('div');
             t.className = 'toast';
 
-            // تحديد اللون حسب نوع الرسالة
             t.style.backgroundColor =
                 type === 'success' ? 'var(--success)' :
                 type === 'error'   ? 'var(--danger)'  :
@@ -1136,7 +1306,6 @@
             t.innerHTML = msg;
             c.appendChild(t);
 
-            // إزالة التوست بعد 3 ثواني
             setTimeout(() => t.remove(), 3000);
         }
         
