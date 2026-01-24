@@ -28,13 +28,13 @@
 
         header { background-color: var(--card-bg); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; padding: 0.5rem 0; }
         .navbar { max-width: 1200px; margin: 0 auto; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .logo { font-size: 1.2rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; }
+        .logo { font-size:1.2rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; }
         .nav-actions { display: flex; align-items: center; gap: 10px; }
         .nav-actions button { background: none; border: none; cursor: pointer; font-size: 0.9rem; color: var(--text-main); font-weight: 600; transition: color 0.3s; padding: 0.4rem 0.8rem; border-radius: 20px;}
         .nav-actions button:hover { color: var(--primary-color); background-color: #f3f4f6; }
         .btn-home { color: var(--text-main) !important; border: 1px solid #E5E7EB; display: none; }
         .btn-login { background-color: var(--primary-color) !important; color: white !important; }
-        .btn-dev-info { color: var(--info) !important; background-color: #EFF6FF !important; border: 1px solid #DBEAFE; }
+        .btn-dev-info { color: var(--info) !important; background-color: #EFF6FF !important; border:1px solid #DBEAFE; }
 
         main { max-width: 1200px; margin: 1rem auto; padding: 0 1rem; position: relative; }
 
@@ -84,15 +84,15 @@
         #dashboard-view { display: none; animation: fadeIn 0.5s ease-in; }
         
         #auth-section { display: none; max-width: 100%; margin: 1rem auto; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; width: 100%; }
-        .form-group { margin-bottom: 1rem; text-align: right; }
+        .form-group { margin-bottom:1rem; text-align: right; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
         .form-control { width: 100%; padding: 0.8rem; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 1rem; }
         /* تنسيق خاص للحقول الصغيرة داخل المتابعة */
         .input-row .form-group { margin-bottom: 0; } 
-        .btn-submit { width: 100%; padding: 0.8rem; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        .btn-submit { width: 100%; padding: 0.8rem; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size:1rem; }
 
         /* النماذج */
-        #teacher-panel, #reciters-panel, #stages-panel { display: none; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2rem; border-right: 5px solid var(--secondary-color); }
+        #teacher-panel, #reciters-panel, #stages-panel { display: none; background: var(--card-bg); padding:1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 2rem; border-right:5px solid var(--secondary-color); }
         .input-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
@@ -138,20 +138,20 @@
             position: relative;
         }
 
-        /* تنسيق بطاقة اليوم في البداية */
+        /* تنسيق بطاقة اليوم في المنتصف */
         .separator-label {
             position: absolute;
-            right: 5px; /* البداية في الموقع RTL */
-            top: -12px; /* محاذاة أعلى الخط */
-            transform: translateY(-50%); /* توسيط عمودي */
-            background-color: #ffffff;
-            padding: 2px 10px;
+            top: 50%;
+            left: 95%;
+            transform: translate(-50%, -50%);
+            background-color: #ff0000;
+            padding: 2px 12px;
             border: 1px solid #e5e7eb;
             border-radius: 10px;
             font-size: 0.8rem;
             font-weight: bold;
             color: var(--text-main);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 5px rgb(14, 110, 2);
             white-space: nowrap;
             z-index: 1;
         }
@@ -162,8 +162,9 @@
             top: -12px;
             transform: translateX(-50%);
             background: white;
-            border: 1px solid #EF4444;
-            color: #EF4444;
+            border:4px solid #ff0000;
+            color: #ef4444;
+            box-shadow: 0 5px 5px rgb(14, 110, 2);
             width: 24px;
             height: 24px;
             border-radius: 50%;
@@ -198,7 +199,7 @@
         #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; }
         .toast { padding: 0.8rem; border-radius: 8px; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease-out; text-align: center; font-size: 0.9rem; }
         @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity:1; } }
 
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary-color); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -261,14 +262,14 @@
         }
 
         .dev-name { font-size: 1.4rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.2rem; }
-        .dev-role { font-size: 0.95rem; color: var(--text-light); margin-bottom: 1.5rem; }
+        .dev-role { font-size: 0.95rem; color: var(--text-light); margin-bottom:1.5rem; }
 
         .dev-details {
             text-align: right;
             background: #f9fafb;
             padding: 1rem;
             border-radius: 8px;
-            margin-bottom: 1.5rem;
+            margin-bottom:1.5rem;
         }
         
         .dev-item {
@@ -482,7 +483,7 @@
                                 <option value="السدس الثاني">السدس الثاني</option>
                                 <option value="سدس الثالث">السدس الثالث</option>
                                 <option value="السدس الرابع">السدس الرابع</option>
-                                <option value="سدس الخامس">السدس الخامس</option>
+                                <option value="السدس الخامس">السدس الخامس</option>
                                 <option value="السدس السادس">السدس السادس</option>
                                 <option value="الثلث الأول">الثلث الأول</option>
                                 <option value="الثلث الثاني">الثلث الثاني</option>
@@ -686,24 +687,27 @@
             document.getElementById('amount-total').value = total;
         }
 
-        // دالة وضع خط الفصل (تم التعديل لتضمين اسم اليوم ودعم الصفحات الأخرى)
+        // دالة وضع خط الفصل
         window.addSeparatorLine = async () => {
             if(!confirm('هل تريد وضع خط أحمر للفصل هنا؟ سيظهر الخط بين البيانات، وستظهر أي بيانات جديدة فوقه.')) return;
             
             try {
-                // حساب اسم اليوم بناءً على التوقيت المحلي (سوريا)
                 const now = new Date();
                 const dayName = now.toLocaleDateString('ar-SY', { weekday: 'long' });
 
-                // تحديد نوع الفاصل بناءً على الصفحة الحالية
-                let sepFreq = selectedTrackingFreq;
-                if (currentView === 'reciters') sepFreq = 'reciters';
-                else if (currentView === 'stages') sepFreq = 'stages';
+                // تحديد نوع التتبع أو الصفحة للفاصل
+                let separatorFreq = selectedTrackingFreq; 
+                
+                if (currentView === 'reciters') {
+                    separatorFreq = 'reciters';
+                } else if (currentView === 'stages') {
+                    separatorFreq = 'stages';
+                }
 
                 await addDoc(collection(db, "daily_records"), {
                     type: 'separator',
-                    frequency: sepFreq, // حفظ النوع حسب الصفحة ليظهر فقط فيها
-                    dayLabel: dayName, // حفظ اسم اليوم
+                    frequency: separatorFreq, 
+                    dayLabel: dayName, 
                     uoi: serverTimestamp()
                 });
                 showToast('تم وضع خط الفصل بنجاح', 'success');
@@ -745,8 +749,6 @@
                 homeBtn.style.display = 'block';
                 pageTitle.textContent = customTitle || 'المختبرون في الأجزاء لهذا الشهر';
                 clearAllText.textContent = 'مسح الكل';
-                separatorBtn.style.display = 'flex'; // إظهار زر الفصل
-                selectedTrackingFreq = 'monthly'; // تحديث المتغير للمساعدة في addSeparatorLine
                 updateFormVisibility(auth.currentUser);
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'reciters');
             } else if (view === 'stages') {
@@ -755,8 +757,6 @@
                 homeBtn.style.display = 'block';
                 pageTitle.textContent = customTitle || 'اختبار المراحل';
                 clearAllText.textContent = 'مسح الكل';
-                separatorBtn.style.display = 'flex'; // إظهار زر الفصل
-                selectedTrackingFreq = 'stages'; // تحديث المتغير للمساعدة في addSeparatorLine
                 updateFormVisibility(auth.currentUser);
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'stages');
             } else if (view === 'dashboard') {
@@ -765,7 +765,6 @@
                 homeBtn.style.display = 'block';
                 pageTitle.textContent = customTitle || 'السجلات';
                 clearAllText.textContent = 'مسح الكل';
-                separatorBtn.style.display = 'flex';
                 updateFormVisibility(auth.currentUser);
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'dashboard');
             }
@@ -801,7 +800,7 @@
             const sepBtn = document.getElementById('btn-separator');
             if(isAdmin) {
                 clearBtn.style.display = 'flex';
-                // لا نتحكم هنا لأننا نتحكمه داخل navigateTo
+                sepBtn.style.display = 'flex';
             } else {
                 clearBtn.style.display = 'none';
                 sepBtn.style.display = 'none';
@@ -874,7 +873,7 @@
             navigateTo('home');
         };
 
-        // دالة حفظ المختبرين
+        // دالة حفظ المختبرين (تم التعديل لحل مشكلة الترتيب الزمني)
         window.handleRecitersSubmit = async (e) => {
             e.preventDefault();
             const name = document.getElementById('reciter-name').value;
@@ -889,10 +888,27 @@
 
             try {
                 let ts = serverTimestamp();
+                
                 if (dateStr) {
-                    const dateObj = new Date(dateStr);
-                    dateObj.setHours(12, 0, 0, 0);
-                    ts = Timestamp.fromDate(dateObj);
+                    const inputDate = new Date(dateStr);
+                    const today = new Date();
+                    
+                    // التحقق هل التاريخ المدخل هو اليوم؟
+                    // نقارن السنة، الشهر، اليوم
+                    const isToday = inputDate.getDate() === today.getDate() &&
+                                    inputDate.getMonth() === today.getMonth() &&
+                                    inputDate.getFullYear() === today.getFullYear();
+
+                    if (isToday) {
+                        // إذا كان اليوم، نستخدم الوقت الفعلي الحالي (serverTimestamp)
+                        // لضمان الترتيب الصحيح مع خطوط الفصل المضافة الآن
+                        ts = serverTimestamp();
+                    } else {
+                        // إذا كان تاريخاً آخر (ماضي أو مستقبل)، نثبت الساعة على 12:00 ظهراً
+                        // لترتيبها حسب الأيام فقط
+                        inputDate.setHours(12, 0, 0, 0);
+                        ts = Timestamp.fromDate(inputDate);
+                    }
                 }
 
                 const dataPayload = {
@@ -1052,6 +1068,7 @@
                 document.getElementById('reciter-level').value = data.zxc;
                 if (data.uoi) {
                     const dateObj = data.uoi.toDate();
+                    // عند التعديل، نعرض التاريخ فقط
                     document.getElementById('reciter-date').valueAsDate = dateObj;
                 }
                 toggleEditButton('#btn-submit-reciter', 'تحديث المختبر', '#btn-cancel-reciter');
@@ -1189,7 +1206,7 @@
             }
         };
 
-        // دالة رسم الجدول (مع دعم الفواصل لجميع الصفحات)
+        // دالة رسم الجدول
         function renderTable(snap, targetView) {
             const body = document.getElementById('records-body');
             const empty = document.getElementById('empty-msg');
@@ -1212,14 +1229,20 @@
                 snap.forEach(docSnap => {
                     const d = docSnap.data();
                     
-                    // التعديل الجذور: التحقق من توافق الفاصل مع الصفحة الحالية
                     if (d.type === 'separator') {
-                        let showSep = false;
-                        if (targetView === 'dashboard' && d.frequency === selectedTrackingFreq) showSep = true;
-                        if (targetView === 'reciters' && d.frequency === 'reciters') showSep = true;
-                        if (targetView === 'stages' && d.frequency === 'stages') showSep = true;
+                        let shouldRender = false;
 
-                        if (showSep) {
+                        if (targetView === 'dashboard' && d.frequency === selectedTrackingFreq) {
+                            shouldRender = true;
+                        } 
+                        else if (targetView === 'reciters' && d.frequency === 'reciters') {
+                            shouldRender = true;
+                        }
+                        else if (targetView === 'stages' && d.frequency === 'stages') {
+                            shouldRender = true;
+                        }
+
+                        if (shouldRender) {
                              body.innerHTML += `
                                 <tr class="separator-row">
                                     <td colspan="6">
