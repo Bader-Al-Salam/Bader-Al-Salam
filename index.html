@@ -6,8 +6,11 @@
     <title>حلقة على بن ابي طالب</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- استدعاء مكتبة html2canvas لالتقاط الصور -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
+            /* الألوان الأساسية - الوضع الفاتح */
             --primary-color: #0d8009; 
             --primary-dark: #000000;
             --secondary-color: #c0ad07;
@@ -15,26 +18,43 @@
             --card-bg: #FFFFFF;
             --text-main: #1F2937;
             --text-light: #6B7280;
+            --border-color: #E5E7EB;
             --danger: #c90e0e;
             --success: #10B981;
             --info: #3B82F6;
             --radius: 15px;
             --shadow: 0 5px 7px 3px #000000, 0px 0px 0px 0px #575b63;
+            --input-bg: #FFFFFF;
+            --table-hover: #f9fafb;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+        /* متغيرات الوضع المظلم */
+        body.dark-mode {
+            --bg-color: #111827;
+            --card-bg: #1F2937;
+            --text-main: #F9FAFB;
+            --text-light: #9CA3AF;
+            --border-color: #374151;
+            --shadow: 0 5px 7px 3px #000000, 0px 0px 0px 0px #000;
+            --input-bg: #374151;
+            --table-hover: #2d3748;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; transition: background-color 0.3s, color 0.3s, border-color 0.3s; }
 
         body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; padding-bottom: 80px; min-height: 100vh; }
 
-        header { background-color: var(--card-bg); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; padding: 0.5rem 0; }
+        header { background-color: var(--card-bg); box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; padding: 0.5rem 0; border-bottom: 1px solid var(--border-color); }
         .navbar { max-width: 1200px; margin: 0 auto; padding: 0.5rem 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .logo { font-size:1.2rem; font-weight: 700; color: var(--primary-color); display: flex; align-items: center; gap: 0.5rem; }
-        .nav-actions { display: flex; align-items: center; gap: 10px; }
-        .nav-actions button { background: none; border: none; cursor: pointer; font-size: 0.9rem; color: var(--text-main); font-weight: 600; transition: color 0.3s; padding: 0.4rem 0.8rem; border-radius: 20px;}
-        .nav-actions button:hover { color: var(--primary-color); background-color: #f3f4f6; }
-        .btn-home { color: var(--text-main) !important; border: 1px solid #E5E7EB; display: none; }
-        .btn-login { background-color: var(--primary-color) !important; color: white !important; }
-        .btn-dev-info { color: var(--info) !important; background-color: #EFF6FF !important; border:1px solid #DBEAFE; }
+        .nav-actions { display: flex; align-items: center; gap: 8px; }
+        
+        /* تنسيق الأزرار العامة */
+        .nav-actions button { background: none; border: 1px solid var(--border-color); cursor: pointer; font-size: 0.85rem; color: var(--text-main); font-weight: 600; transition: color 0.3s, background 0.3s; padding: 0.4rem 0.8rem; border-radius: 20px; display: flex; align-items: center; gap: 5px;}
+        .nav-actions button:hover { color: var(--primary-color); background-color: var(--table-hover); }
+        .btn-home { color: var(--text-main) !important; display: none; }
+        .btn-login { background-color: var(--primary-color) !important; color: white !important; border: none !important; }
+        .btn-dev-info { color: var(--info) !important; background-color: rgba(59, 130, 246, 0.1) !important; border:1px solid rgba(59, 130, 246, 0.2) !important; }
 
         main { max-width: 1200px; margin: 1rem auto; padding: 0 1rem; position: relative; }
 
@@ -44,7 +64,7 @@
         .welcome-hero h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
         .welcome-hero p { font-size: 1rem; opacity: 0.9; }
 
-        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--primary-dark); margin: 2rem 0 1rem 0; border-right: 4px solid var(--primary-color); padding-right: 10px; }
+        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--text-main); margin: 2rem 0 1rem 0; border-right: 4px solid var(--primary-color); padding-right: 10px; }
 
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
         
@@ -85,8 +105,8 @@
         
         #auth-section { display: none; max-width: 100%; margin: 1rem auto; background: var(--card-bg); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); text-align: center; width: 100%; }
         .form-group { margin-bottom:1rem; text-align: right; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
-        .form-control { width: 100%; padding: 0.8rem; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: var(--text-main); }
+        .form-control { width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; background-color: var(--input-bg); color: var(--text-main); }
         /* تنسيق خاص للحقول الصغيرة داخل المتابعة */
         .input-row .form-group { margin-bottom: 0; } 
         .btn-submit { width: 100%; padding: 0.8rem; background-color: var(--primary-color); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size:1rem; }
@@ -100,14 +120,16 @@
         .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary-color); }
         .stat-label { font-size: 0.85rem; color: var(--text-light); }
 
-        .table-container { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); overflow-x: auto; border: 1px solid #E5E7EB; -webkit-overflow-scrolling: touch; }
+        .table-container { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); overflow-x: auto; border: 1px solid var(--border-color); -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th, td { padding: 0.8rem; text-align: right; border-bottom: 1px solid #E5E7EB; vertical-align: middle; white-space: nowrap; }
+        th, td { padding: 0.8rem; text-align: right; border-bottom: 1px solid var(--border-color); vertical-align: middle; white-space: nowrap; }
+        th { color: var(--text-light); font-weight: 600; }
+        tr:hover td { background-color: var(--table-hover); }
         
         /* تنسيق شارة المجموع */
         .total-badge {
-            background-color: #E0F2FE;
-            color: #0369A1;
+            background-color: rgba(14, 165, 233, 0.1);
+            color: #0284c7;
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 0.75rem;
@@ -115,45 +137,97 @@
             margin-right: 5px;
             display: inline-block;
         }
+        body.dark-mode .total-badge {
+            background-color: rgba(56, 189, 248, 0.2);
+            color: #38bdf8;
+        }
 
-        .btn-delete { background-color: #FEE2E2; color: #991B1B; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .btn-delete { background-color: rgba(254, 226, 226, 0.8); color: #991B1B; border: 1px solid rgba(254, 226, 226, 1); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .btn-delete:hover { background-color: #EF4444; color: white; }
+        body.dark-mode .btn-delete { background-color: rgba(127, 29, 29, 0.3); color: #fca5a5; border-color: #7f1d1d; }
+        body.dark-mode .btn-delete:hover { background-color: #ef4444; color: white; }
 
-        .btn-edit { background-color: #DBEAFE; color: #1E40AF; border: none; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; margin-left: 5px; }
+        .btn-edit { background-color: rgba(219, 234, 254, 0.8); color: #1E40AF; border: 1px solid rgba(219, 234, 254, 1); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; margin-left: 5px; }
         .btn-edit:hover { background-color: #3B82F6; color: white; }
+        body.dark-mode .btn-edit { background-color: rgba(30, 64, 175, 0.3); color: #93c5fd; border-color: #1e3a8a; }
+        body.dark-mode .btn-edit:hover { background-color: #3b82f6; color: white; }
 
         /* زر وضع خط الفصل */
         .btn-separator { background-color: #EF4444; color: white; border: 1px solid #DC2626; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s; display: none; margin-left: 10px; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(239, 68, 68, 0.2); }
         .btn-separator:hover { background-color: #DC2626; border-color: #B91C1C; transform: translateY(-1px); }
 
+        /* زر مسح الكل */
         .btn-delete-all { background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s; display: none; margin-right: auto; display: flex; align-items: center; gap: 0.5rem; }
         .btn-delete-all:hover { background-color: #DC2626; color: white; border-color: #DC2626; }
+        body.dark-mode .btn-delete-all { background-color: rgba(127, 29, 29, 0.2); color: #fca5a5; border-color: #7f1d1d; }
+        body.dark-mode .btn-delete-all:hover { background-color: #dc2626; color: white; }
+
+        /* زر حفظ كصورة */
+        .btn-screenshot { background-color: #8B5CF6; color: white; border: 1px solid #7C3AED; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.3s; display: none; margin-left: 10px; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2); }
+        .btn-screenshot:hover { background-color: #7C3AED; border-color: #6D28D9; transform: translateY(-1px); }
+        
+        /* تنشيط لون الزر عند وضع التصوير */
+        .btn-screenshot.active {
+            background-color: #10B981; /* أخضر */
+            border-color: #059669;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        /* زر تبديل الوضع */
+        .btn-theme { border: none; background: transparent; color: var(--text-main); font-size: 1.2rem; cursor: pointer; padding: 0.5rem; }
 
         /* تنسيق صف الخط الأحمر للفصل */
-        .separator-row td { padding: 10px 0; border: none; background: #fff; }
+        .separator-row td { padding: 10px 0; border: none; background: var(--card-bg); }
         .red-separator-line {
             border-top: 3px solid #EF4444; /* الخط الأحمر */
             width: 100%;
             margin: 0;
             position: relative;
+            padding: 10px 0; /* مساحة للنقطة */
         }
 
         /* تنسيق بطاقة اليوم في المنتصف */
-        .separator-label {
+        .separator-label-container {
             position: absolute;
             top: 50%;
             left: 95%;
             transform: translate(-50%, -50%);
             background-color: #ff0000;
-            padding: 2px 12px;
+            padding: 4px 15px;
             border: 1px solid #e5e7eb;
             border-radius: 10px;
             font-size: 0.8rem;
             font-weight: bold;
-            color: var(--text-main);
+            color: white;
             box-shadow: 0 5px 5px rgb(14, 110, 2);
             white-space: nowrap;
             z-index: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+        .separator-label-container:hover {
+            background-color: #dc2626;
+        }
+        
+        /* إخفاء معلومات العدد عند عدم وجود مخفيات */
+        .separator-label-container .hidden-count {
+            display: none;
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .separator-label-container.has-hidden .hidden-count {
+            display: inline-block;
         }
 
         .separator-delete-btn {
@@ -178,11 +252,46 @@
         }
         .separator-delete-btn:hover { background: #EF4444; color: white; }
 
+        /* --- نقطة التصوير (الجديدة) --- */
+        .screenshot-dot-container {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            display: none; /* مخفية افتراضياً */
+        }
+
+        /* إظهار النقاط عند تفعيل الوضع */
+        body.screenshot-mode .screenshot-dot-container {
+            display: flex;
+        }
+
+        .screenshot-dot {
+            width: 24px;
+            height: 24px;
+            background-color: #8B5CF6; /* لون بنفسجي */
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        .screenshot-dot:hover {
+            transform: scale(1.2);
+            background-color: #7C3AED;
+        }
+
         .rating-wrapper { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         
-        .btn-like { background: none; border: 1px solid #E5E7EB; border-radius: 20px; padding: 0.3rem 0.6rem; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; transition: transform 0.2s, background-color 0.2s; color: var(--text-main); height: 32px; }
+        .btn-like { background: none; border: 1px solid var(--border-color); border-radius: 20px; padding: 0.3rem 0.6rem; cursor: pointer; font-size: 0.85rem; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem; transition: transform 0.2s, background-color 0.2s; color: var(--text-main); height: 32px; }
         .btn-like:hover:not(:disabled) { background-color: #FCE7F3; border-color: #EC4899; transform: scale(1.05); }
-        .btn-like:disabled { cursor: default; opacity: 0.6; background-color: #f9fafb; }
+        .btn-like:disabled { cursor: default; opacity: 0.6; background-color: var(--input-bg); }
         .btn-like i { color: #EC4899; font-size: 0.9rem; }
         .like-count { font-weight: 700; font-size: 0.8rem; }
 
@@ -194,17 +303,32 @@
 
         .empty-state { text-align: center; padding: 3rem; color: var(--text-light); }
         
-        .frequency-tag { font-size: 0.75rem; color: var(--text-light); background-color: #F3F4F6; padding: 2px 6px; border-radius: 4px; margin-right: 5px; }
+        .frequency-tag { font-size: 0.75rem; color: var(--text-light); background-color: var(--input-bg); padding: 2px 6px; border-radius: 4px; margin-right: 5px; }
 
         #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; flex-direction: column; gap: 10px; width: 90%; max-width: 400px; }
         .toast { padding: 0.8rem; border-radius: 8px; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); animation: slideIn 0.3s ease-out; text-align: center; font-size: 0.9rem; }
         @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity:1; } }
 
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--primary-color); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
+        .loader { border: 3px solid var(--border-color); border-top: 3px solid var(--primary-color); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        .btn-cancel-edit { background-color: #9CA3AF; color: white; width: auto; display: none; padding: 0.8rem; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        /* تنسيق زر إلغاء التعديل */
+        .btn-cancel-edit { 
+            background-color: #6B7280; 
+            color: white; 
+            width: auto; 
+            display: none; 
+            padding: 0.8rem; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            font-size: 1rem;
+            margin-left: 10px;
+            transition: background 0.3s;
+        }
+        .btn-cancel-edit:hover { background-color: #4B5563; }
 
         /* --- تصميم النافذة المنبثقة للمطور --- */
         #dev-info-modal {
@@ -222,7 +346,7 @@
         }
 
         .modal-content {
-            background-color: white;
+            background-color: var(--card-bg);
             padding: 2rem;
             border-radius: var(--radius);
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
@@ -231,6 +355,7 @@
             text-align: center;
             position: relative;
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid var(--border-color);
         }
 
         .close-modal {
@@ -266,7 +391,7 @@
 
         .dev-details {
             text-align: right;
-            background: #f9fafb;
+            background: var(--input-bg);
             padding: 1rem;
             border-radius: 8px;
             margin-bottom:1.5rem;
@@ -278,6 +403,7 @@
             gap: 10px;
             margin-bottom: 0.8rem;
             font-size: 0.9rem;
+            color: var(--text-main);
         }
         .dev-item:last-child { margin-bottom: 0; }
         .dev-item i { color: var(--primary-color); width: 20px; }
@@ -287,15 +413,22 @@
             to { transform: scale(1); opacity: 1; }
         }
 
+        /* --- استجابة الموبايل (تصغير النصوص والأزرار) --- */
         @media (max-width: 768px) {
+            body { font-size: 14px; } /* تصغير خط الجسم */
+            
             .logo { font-size: 1rem; }
             .stat-value { font-size: 1.8rem; }
+            
             .input-row { grid-template-columns: 1fr; gap: 0.5rem; }
             .rating-wrapper { flex-direction: row; justify-content: space-between; width: 100%; }
-            .btn-like { flex-grow: 1; justify-content: center; padding: 0.4rem; }
+            .btn-like { flex-grow: 1; justify-content: center; padding: 0.4rem; font-size: 0.75rem; }
             .btn-home { display: block; }
-            .nav-actions span { display: none; }
-            .nav-actions button i { margin: 0; font-size: 1.2rem; }
+            
+            /* تصغير الأزرار */
+            .nav-actions button { font-size: 0.75rem; padding: 0.3rem 0.6rem; }
+            .nav-actions button span { display: none; } /* إخفاء النصوص والاكتفاء بالأيقونات */
+            .nav-actions button i { margin: 0; font-size: 1.1rem; }
 
             .cards-grid { grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-top: 1rem; }
             .menu-card { padding: 0.8rem 0.5rem; min-height: 120px; }
@@ -305,11 +438,29 @@
 
             .tracking-grid { grid-template-columns: 1fr; }
 
+            /* تصغير النماذج والجداول */
             #teacher-panel, #reciters-panel, #stages-panel { padding: 1rem; margin-bottom: 1.5rem; }
             .form-group { margin-bottom: 0.6rem; }
-            .form-group label { font-size: 0.85rem; margin-bottom: 0.3rem; }
-            .form-control { padding: 0.6rem; font-size: 0.95rem; }
-            .btn-submit { padding: 0.6rem; font-size: 0.95rem; }
+            .form-group label { font-size: 0.8rem; margin-bottom: 0.3rem; }
+            .form-control { padding: 0.6rem; font-size: 0.9rem; }
+            .btn-submit, .btn-cancel-edit { padding: 0.6rem; font-size: 0.9rem; }
+            
+            /* تصغير الجدول بشكل كبير */
+            th, td { padding: 0.5rem 0.3rem; font-size: 0.75rem; }
+            .badge { font-size: 0.65rem; padding: 0.15rem 0.4rem; }
+            .btn-delete, .btn-edit { padding: 0.25rem 0.5rem; font-size: 0.7rem; }
+            .btn-like { height: 28px; padding: 0.2rem 0.4rem; }
+            .like-count { font-size: 0.7rem; }
+            
+            /* الأزرار بعرض كامل في الموبايل */
+            .btn-submit, .btn-cancel-edit {
+                width: 100%;
+                margin-top: 5px;
+                margin-left: 0;
+            }
+            
+            /* تباعد أصغر */
+            .section-title { font-size: 1rem; margin: 1.5rem 0 0.8rem 0; }
         }
     </style>
 </head>
@@ -319,10 +470,15 @@
         <div class="navbar">
             <div class="logo"><i class="fas fa-quran"></i> <span>حلقة علي بن أبي طالب</span></div>
             <div class="nav-actions">
-                <button id="btn-home" class="nav-actions btn-home" onclick="navigateTo('home')">
+                <button id="btn-home" class="btn-home" onclick="navigateTo('home')">
                     <i class="fas fa-home"></i> <span>الرئيسية</span>
                 </button>
                 
+                <!-- زر تبديل الوضع المظلم -->
+                <button class="btn-theme" onclick="toggleTheme()" title="تغيير المظهر">
+                    <i id="theme-icon" class="fas fa-moon"></i>
+                </button>
+
                 <!-- زر معلومات المطور -->
                 <button class="btn-dev-info" onclick="toggleDevInfo()">
                     <i class="fas fa-user-tie"></i> <span>عن المطور</span>
@@ -410,7 +566,7 @@
                         </div>
                         <div class="form-group">
                             <label>المجموع</label>
-                            <input type="number" id="amount-total" class="form-control" readonly style="background-color: #f9fafb; font-weight:bold; color:var(--primary-color);">
+                            <input type="number" id="amount-total" class="form-control" readonly style="background-color: var(--input-bg); font-weight:bold; color:var(--primary-color);">
                         </div>
                     </div>
 
@@ -437,7 +593,8 @@
                     </div>
 
                     <div style="text-align:left; margin-top: 1rem;">
-                        <button type="button" id="btn-cancel-edit" class="btn-cancel-edit" onclick="handleCancelEdit()">إلغاء التعديل</button>
+                        <!-- زر إلغاء التعديل للمتابعة -->
+                        <button type="button" id="btn-cancel-entry" class="btn-cancel-edit" onclick="handleCancelEdit()">إلغاء التعديل</button>
                         <button type="submit" id="btn-submit-entry" class="btn-submit" style="width:auto; display:inline-flex; gap:5px; justify-content: center;"><i class="fas fa-cloud-upload-alt"></i> تحديث البيانات</button>
                     </div>
                 </form>
@@ -459,6 +616,7 @@
                     </div>
                     <div class="form-group" style="margin-top:10px;"><label>تاريخ الاختبار</label><input type="date" id="reciter-date" class="form-control" required></div>
                     <div style="text-align:left; margin-top: 1rem;">
+                        <!-- زر إلغاء التعديل للمختبرين -->
                         <button type="button" id="btn-cancel-reciter" class="btn-cancel-edit" onclick="handleCancelEdit()">إلغاء التعديل</button>
                         <button type="submit" id="btn-submit-reciter" class="btn-submit" style="width:auto; display:inline-flex; gap:5px; justify-content: center;"><i class="fas fa-save"></i> حفظ المختبر</button>
                     </div>
@@ -498,6 +656,7 @@
                     </div>
                     <div class="form-group" style="margin-top:10px;"><label>ملاحظات</label><input type="text" id="stages-notes" class="form-control" placeholder="ملاحظات..."></div>
                     <div style="text-align:left; margin-top: 1rem;">
+                        <!-- زر إلغاء التعديل للمراحل -->
                         <button type="button" id="btn-cancel-stage" class="btn-cancel-edit" onclick="handleCancelEdit()">إلغاء التعديل</button>
                         <button type="submit" id="btn-submit-stage" class="btn-submit" style="width:auto; display:inline-flex; gap:5px; justify-content: center;"><i class="fas fa-award"></i> حفظ المرحلة</button>
                     </div>
@@ -512,7 +671,7 @@
 
             <section>
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-                    <div style="display:flex; gap:10px; margin-right: auto;">
+                    <div style="display:flex; gap:8px; margin-right: auto; flex-wrap: wrap;">
                         <button id="btn-clear-all" onclick="handleClearAll()" class="btn-delete-all">
                             <i class="fas fa-trash-alt"></i>
                             <span id="btn-clear-text">مسح الكل</span>
@@ -523,6 +682,12 @@
                             <i class="fas fa-grip-lines"></i>
                             <span id="sep-text">فصل البيانات</span>
                         </button>
+                        
+                        <!-- زر حفظ كصورة (يظهر للمعلم فقط) -->
+                        <button id="btn-screenshot" onclick="toggleScreenshotMode()" class="btn-screenshot">
+                            <i class="fas fa-camera"></i>
+                            <span>صورة</span>
+                        </button>
                     </div>
                     <h3 style="font-size: 1.1rem; margin-right: 10px;">السجل</h3>
                 </div>
@@ -532,10 +697,11 @@
                             <tr>
                                 <th>الطالب</th>
                                 <th>المقدار</th>
+                                <th id="th-score" class="col-score" style="display:none;">الدرجة من 100%</th>
                                 <th>التقييم والتفاعل</th> 
                                 <th>ملاحظات</th>
                                 <th>التاريخ</th>
-                                <th id="th-actions" style="display:none;">إجراءات</th> 
+                                <th id="th-actions" class="col-actions" style="display:none;">إجراءات</th> 
                             </tr>
                         </thead>
                         <tbody id="records-body"></tbody>
@@ -601,6 +767,43 @@
         let cachedSnapshot = null; 
         let selectedTrackingFreq = 'daily'; 
         let editDocId = null;
+        
+        // --- متغير وضع تصوير القسم ---
+        let isScreenshotMode = false;
+
+        // --- حالة الطي (Collapse) ---
+        let collapsedSeparators = JSON.parse(localStorage.getItem('hifz_platform_collapsed') || '{}');
+
+        window.toggleCollapse = (id) => {
+            if (collapsedSeparators[id]) {
+                delete collapsedSeparators[id];
+            } else {
+                collapsedSeparators[id] = true;
+            }
+            localStorage.setItem('hifz_platform_collapsed', JSON.stringify(collapsedSeparators));
+            if (cachedSnapshot) renderTable(cachedSnapshot, currentView);
+        };
+
+        // --- تهيئة الوضع المظلم عند التحميل ---
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('theme-icon').classList.replace('fa-moon', 'fa-sun');
+        }
+
+        // --- تبديل الوضع المظلم ---
+        window.toggleTheme = () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            const icon = document.getElementById('theme-icon');
+            if (isDark) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        };
 
         // --- توليد خيارات الأجزاء الشهرية ---
         const partsSelect = document.getElementById('stages-unit');
@@ -730,6 +933,11 @@
             const clearAllBtn = document.getElementById('btn-clear-all');
             const separatorBtn = document.getElementById('btn-separator');
             const clearAllText = document.getElementById('btn-clear-text');
+            
+            // إلغاء أي تعديل قيد التنفيذ عند الانتقال
+            handleCancelEdit(true);
+            // إلغاء وضع التصوير
+            if(isScreenshotMode) toggleScreenshotMode();
 
             authSection.style.display = 'none';
             currentView = view;
@@ -742,7 +950,6 @@
                 recitersPanel.style.display = 'none';
                 stagesPanel.style.display = 'none';
                 separatorBtn.style.display = 'none';
-                handleCancelEdit();
             } else if (view === 'reciters') {
                 homeView.style.display = 'none';
                 dashboardView.style.display = 'block';
@@ -750,6 +957,7 @@
                 pageTitle.textContent = customTitle || 'المختبرون في الأجزاء لهذا الشهر';
                 clearAllText.textContent = 'مسح الكل';
                 updateFormVisibility(auth.currentUser);
+                updateTableColumns('reciters'); // تحديث الأعمدة
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'reciters');
             } else if (view === 'stages') {
                 homeView.style.display = 'none';
@@ -758,6 +966,7 @@
                 pageTitle.textContent = customTitle || 'اختبار المراحل';
                 clearAllText.textContent = 'مسح الكل';
                 updateFormVisibility(auth.currentUser);
+                updateTableColumns('stages'); // تحديث الأعمدة
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'stages');
             } else if (view === 'dashboard') {
                 homeView.style.display = 'none';
@@ -766,10 +975,30 @@
                 pageTitle.textContent = customTitle || 'السجلات';
                 clearAllText.textContent = 'مسح الكل';
                 updateFormVisibility(auth.currentUser);
+                updateTableColumns('dashboard'); // تحديث الأعمدة
                 if (cachedSnapshot) renderTable(cachedSnapshot, 'dashboard');
             }
             updateClearButtonVisibility();
         };
+
+        // دالة إدارة ظهور الأعمدة (معالجة التشوش)
+        function updateTableColumns(view) {
+            const scoreEls = document.querySelectorAll('.col-score');
+            const actionsEls = document.querySelectorAll('.col-actions');
+
+            // إعادة تعيين الكل للإخفاء أولاً
+            scoreEls.forEach(el => el.style.display = 'none');
+            actionsEls.forEach(el => el.style.display = 'none');
+
+            // إظهار حسب الحاجة
+            if (view === 'reciters' || view === 'stages') {
+                scoreEls.forEach(el => el.style.display = 'table-cell');
+            }
+            
+            if (auth.currentUser) {
+                actionsEls.forEach(el => el.style.display = 'table-cell');
+            }
+        }
 
         // دالة تبديل نموذج الدخول
         window.toggleAuthModal = () => {
@@ -798,20 +1027,25 @@
             const isAdmin = auth.currentUser !== null;
             const clearBtn = document.getElementById('btn-clear-all');
             const sepBtn = document.getElementById('btn-separator');
+            const shotBtn = document.getElementById('btn-screenshot'); // زر الصورة
+
             if(isAdmin) {
                 clearBtn.style.display = 'flex';
                 sepBtn.style.display = 'flex';
+                shotBtn.style.display = 'flex'; // إظهار زر الصورة
             } else {
                 clearBtn.style.display = 'none';
                 sepBtn.style.display = 'none';
+                shotBtn.style.display = 'none'; // إخفاء زر الصورة
             }
+            // تحديث عمود الإجراءات عند تغيير حالة الدخول
+            updateTableColumns(currentView);
         }
 
         const updateFormVisibility = (user) => {
             const teacherPanel = document.getElementById('teacher-panel');
             const recitersPanel = document.getElementById('reciters-panel');
             const stagesPanel = document.getElementById('stages-panel');
-            const actionsHeader = document.getElementById('th-actions');
             
             teacherPanel.style.display = 'none';
             recitersPanel.style.display = 'none';
@@ -825,9 +1059,6 @@
                 } else if (currentView === 'dashboard') {
                     teacherPanel.style.display = 'block';
                 }
-                actionsHeader.style.display = 'table-cell'; 
-            } else {
-                actionsHeader.style.display = 'none'; 
             }
             updateClearButtonVisibility();
         }
@@ -873,7 +1104,7 @@
             navigateTo('home');
         };
 
-        // دالة حفظ المختبرين (تم التعديل لحل مشكلة الترتيب الزمني)
+        // دالة حفظ المختبرين
         window.handleRecitersSubmit = async (e) => {
             e.preventDefault();
             const name = document.getElementById('reciter-name').value;
@@ -893,19 +1124,13 @@
                     const inputDate = new Date(dateStr);
                     const today = new Date();
                     
-                    // التحقق هل التاريخ المدخل هو اليوم؟
-                    // نقارن السنة، الشهر، اليوم
                     const isToday = inputDate.getDate() === today.getDate() &&
                                     inputDate.getMonth() === today.getMonth() &&
                                     inputDate.getFullYear() === today.getFullYear();
 
                     if (isToday) {
-                        // إذا كان اليوم، نستخدم الوقت الفعلي الحالي (serverTimestamp)
-                        // لضمان الترتيب الصحيح مع خطوط الفصل المضافة الآن
                         ts = serverTimestamp();
                     } else {
-                        // إذا كان تاريخاً آخر (ماضي أو مستقبل)، نثبت الساعة على 12:00 ظهراً
-                        // لترتيبها حسب الأيام فقط
                         inputDate.setHours(12, 0, 0, 0);
                         ts = Timestamp.fromDate(inputDate);
                     }
@@ -1068,7 +1293,6 @@
                 document.getElementById('reciter-level').value = data.zxc;
                 if (data.uoi) {
                     const dateObj = data.uoi.toDate();
-                    // عند التعديل، نعرض التاريخ فقط
                     document.getElementById('reciter-date').valueAsDate = dateObj;
                 }
                 toggleEditButton('#btn-submit-reciter', 'تحديث المختبر', '#btn-cancel-reciter');
@@ -1107,44 +1331,56 @@
                 toggleEditButton('#btn-submit-entry', 'حفظ التعديلات', '#btn-cancel-entry');
             }
 
-            document.getElementById('teacher-panel').scrollIntoView({behavior: "smooth"});
-            document.getElementById('reciters-panel').scrollIntoView({behavior: "smooth"});
-            document.getElementById('stages-panel').scrollIntoView({behavior: "smooth"});
+            // الصعود لأعلى الصفحة
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
+        // دالة تبديل أزرار التعديل والإلغاء
         function toggleEditButton(submitBtnId, text, cancelBtnId) {
             const btn = document.querySelector(submitBtnId);
-            btn.innerHTML = `<i class="fas fa-edit"></i> ${text}`;
-            document.getElementById(cancelBtnId).style.display = 'inline-flex';
+            if(btn) btn.innerHTML = `<i class="fas fa-edit"></i> ${text}`;
+            
+            const cleanCancelId = cancelBtnId.replace('#', '');
+            const cancelBtn = document.getElementById(cleanCancelId);
+            
+            if(cancelBtn) cancelBtn.style.display = 'inline-flex';
         }
 
-        window.handleCancelEdit = () => {
+        // دالة إلغاء التعديل
+        window.handleCancelEdit = (silent = false) => {
             editDocId = null;
             
+            // إعادة تعيين جميع النماذج
             document.getElementById('entry-form').reset();
             document.getElementById('reciters-form').reset();
             document.getElementById('stages-form').reset();
+            
+            // إعادة تعيين الحقول المحسوبة أو الخاصة
             document.getElementById('amount-total').value = "";
             document.getElementById('monthly-text').value = "";
+            document.getElementById('stages-amount').value = '1';
+            document.getElementById('reciter-date').valueAsDate = new Date();
 
+            // إخفاء جميع أزرار الإلغاء
             document.querySelectorAll('.btn-cancel-edit').forEach(btn => btn.style.display = 'none');
 
+            // إعادة نصوص الأزرار للحالة الافتراضية
             document.getElementById('btn-submit-entry').innerHTML = '<i class="fas fa-cloud-upload-alt"></i> تحديث البيانات';
             document.getElementById('btn-submit-reciter').innerHTML = '<i class="fas fa-save"></i> حفظ المختبر';
             document.getElementById('btn-submit-stage').innerHTML = '<i class="fas fa-award"></i> حفظ المرحلة';
             
-            document.getElementById('reciter-date').valueAsDate = new Date();
-            document.getElementById('stages-amount').value = '1';
-            
+            // إذا كنا في لوحة التحكم، نعيد ضبط الحالة حسب التردد المختار
             if(currentView === 'dashboard') {
                 document.getElementById('attendance').value = 'present';
                 if(selectedTrackingFreq === 'monthly') {
-                    document.getElementById('monthly-text').value = "";
+                     document.getElementById('monthly-text').value = "";
                 } else {
-                    document.getElementById('amount-from').value = "";
-                    document.getElementById('amount-to').value = "";
+                     document.getElementById('amount-from').value = "";
+                     document.getElementById('amount-to').value = "";
                 }
             }
+
+            if(!silent) showToast('تم إلغاء التعديل', 'info');
         }
 
         window.handleDelete = async (id) => {
@@ -1206,12 +1442,155 @@
             }
         };
 
-        // دالة رسم الجدول
+        // --- الجديد: تبديل وضع التصوير ---
+        window.toggleScreenshotMode = () => {
+            isScreenshotMode = !isScreenshotMode;
+            const btn = document.getElementById('btn-screenshot');
+            const body = document.body;
+            
+            if (isScreenshotMode) {
+                btn.classList.add('active');
+                btn.innerHTML = '<i class="fas fa-times-circle"></i> <span>إلغاء</span>';
+                body.classList.add('screenshot-mode');
+                showToast('انقر على النقطة البنفسجية بجانب أي خط أحمر لالتقاط صورة للقسم', 'info');
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = '<i class="fas fa-camera"></i> <span>صورة</span>';
+                body.classList.remove('screenshot-mode');
+            }
+        };
+
+        // --- الجديد: التقاط صورة لقسم محدد ---
+        window.captureSection = async (sepId) => {
+            if (!isScreenshotMode) return;
+
+            const allRows = Array.from(document.querySelectorAll('#records-body tr'));
+            const separatorIndex = allRows.findIndex(row => row.getAttribute('data-id') == sepId);
+
+            if (separatorIndex === -1) {
+                showToast('لم يتم العثور على القسم', 'error');
+                return;
+            }
+
+            // جمع الصفوف بعد هذا الفاصل وحتى الفاصل التالي
+            let rowsToCapture = [];
+            for (let i = separatorIndex + 1; i < allRows.length; i++) {
+                if (allRows[i].classList.contains('separator-row')) break;
+                rowsToCapture.push(allRows[i]);
+            }
+
+            if (rowsToCapture.length === 0) {
+                showToast('لا توجد بيانات تحت هذا الخط لالتقاطها', 'warning');
+                return;
+            }
+
+            showToast('جاري التقاط صورة القسم...', 'info');
+
+            // إنشاء جدول مؤقت
+            const tempTable = document.createElement('table');
+            tempTable.style.width = '100%';
+            tempTable.style.borderCollapse = 'collapse';
+            tempTable.style.backgroundColor = '#ffffff';
+
+            // استنساخ الترويسة
+            const thead = document.querySelector('#records-table thead').cloneNode(true);
+            // إزالة عمود الإجراءات من الترويسة
+            const thActions = thead.querySelector('.col-actions');
+            if(thActions) thActions.remove();
+            
+            // التعامل مع عمود الدرجات (إذا كان مخفياً في العرض، نزيله أو نضيفه حسب الرغبة، هنا سنحافظ على ظهوره إذا كان ظاهراً أصلاً)
+            const thScore = thead.querySelector('.col-score');
+            if (thScore && thScore.style.display === 'none') {
+                thScore.remove();
+            }
+
+            // تلوين خلفية الترويسة للأبيض للصورة
+            Array.from(thead.querySelectorAll('th')).forEach(th => {
+                th.style.backgroundColor = '#f3f4f6';
+                th.style.color = '#000';
+                th.style.borderBottom = '2px solid #000';
+            });
+
+            tempTable.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            
+            // إضافة صف يحمل اسم اليوم/القسم (اختياري للجمالية)
+            const sepRowData = allRows[separatorIndex];
+            const sepLabel = sepRowData.querySelector('.separator-label-container span').innerText;
+            
+            const titleRow = document.createElement('tr');
+            titleRow.innerHTML = `<td colspan="6" style="text-align:center; padding:10px; font-weight:bold; font-size:1.1rem; background:#f9fafb; border-bottom:2px solid #ef4444;">سجل ${sepLabel}</td>`;
+            tbody.appendChild(titleRow);
+
+            rowsToCapture.forEach(row => {
+                const clone = row.cloneNode(true);
+                
+                // إزالة عمود الإجراءات
+                const tdActions = clone.querySelector('.col-actions');
+                if(tdActions) tdActions.remove();
+
+                // تثبيت الألوان للصورة (وضع فاتح)
+                Array.from(clone.children).forEach(td => {
+                    td.style.backgroundColor = '#ffffff';
+                    td.style.color = '#000000';
+                    td.style.borderBottom = '1px solid #e5e7eb';
+                });
+                
+                tbody.appendChild(clone);
+            });
+            tempTable.appendChild(tbody);
+
+            // إنشاء حاوية للتصوير
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.left = '-9999px';
+            container.style.top = '0';
+            container.style.padding = '20px';
+            container.style.background = '#ffffff';
+            container.style.width = 'fit-content';
+            container.appendChild(tempTable);
+            document.body.appendChild(container);
+
+            try {
+                const canvas = await html2canvas(container, {
+                    scale: 2,
+                    useCORS: true, 
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+
+                const image = canvas.toDataURL("image/png");
+                const link = document.createElement('a');
+                link.href = image;
+                link.download = `سجل-${sepLabel}-${new Date().toISOString().slice(0,10)}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showToast('تم حفظ الصورة بنجاح', 'success');
+                
+                // إغلاق الوضع بعد النجاح
+                toggleScreenshotMode();
+
+            } catch (error) {
+                console.error(error);
+                showToast('فشل التقاط الصورة', 'error');
+            } finally {
+                if (document.body.contains(container)) {
+                    document.body.removeChild(container);
+                }
+            }
+        }
+
+        // --- دالة رسم الجدول (مع إضافة النقاط) ---
         function renderTable(snap, targetView) {
             const body = document.getElementById('records-body');
             const empty = document.getElementById('empty-msg');
             const table = document.getElementById('records-table');
+            
             body.innerHTML = ''; 
+            
             let s=0, e=0, n=0;
             
             const isAdmin = auth.currentUser !== null;
@@ -1221,40 +1600,110 @@
             const currentMonth = now.getMonth();
             const currentYear = now.getFullYear();
 
-            let visibleCount = 0;
+            let visibleCount =0;
+            const fragment = document.createDocumentFragment();
+            
+            let skipMode = false;
+            
+            // حساب الأعمدة الظاهرة حالياً لضبط colspan الفاصل
+            let colSpanCount =5;
+            if (targetView === 'reciters' || targetView === 'stages') colSpanCount++;
+            if (isAdmin) colSpanCount++;
 
-            if(snap.empty) { empty.style.display='block'; table.style.display='none'; }
-            else {
-                empty.style.display='none'; table.style.display='table';
-                snap.forEach(docSnap => {
+            if(snap.empty) { 
+                empty.style.display='block'; 
+                table.style.display='none'; 
+            } else {
+                empty.style.display='none'; 
+                table.style.display='table';
+                
+                const docs = snap.docs;
+                for (let i =0; i < docs.length; i++) {
+                    const docSnap = docs[i];
                     const d = docSnap.data();
                     
                     if (d.type === 'separator') {
-                        let shouldRender = false;
+                        if (skipMode) {
+                            skipMode = false;
+                        }
 
-                        if (targetView === 'dashboard' && d.frequency === selectedTrackingFreq) {
-                            shouldRender = true;
-                        } 
-                        else if (targetView === 'reciters' && d.frequency === 'reciters') {
-                            shouldRender = true;
-                        }
-                        else if (targetView === 'stages' && d.frequency === 'stages') {
-                            shouldRender = true;
-                        }
+                        let shouldRender = false;
+                        if (targetView === 'dashboard' && d.frequency === selectedTrackingFreq) shouldRender = true;
+                        else if (targetView === 'reciters' && d.frequency === 'reciters') shouldRender = true;
+                        else if (targetView === 'stages' && d.frequency === 'stages') shouldRender = true;
 
                         if (shouldRender) {
-                             body.innerHTML += `
-                                <tr class="separator-row">
-                                    <td colspan="6">
-                                        <div class="red-separator-line">
-                                            ${d.dayLabel ? `<div class="separator-label">${d.dayLabel}</div>` : ''}
-                                            <button class="separator-delete-btn" onclick="handleDelete('${docSnap.id}')" title="حذف الخط">x</button>
+                             const sepId = docSnap.id;
+                             const isCollapsed = !!collapsedSeparators[sepId];
+                             
+                             // --- الحل الجذري: التحقق من وجود فاصل تالي ---
+                             let hasNextSeparator = false;
+                             if (isCollapsed) {
+                                 for (let j = i + 1; j < docs.length; j++) {
+                                     const nextD = docs[j].data();
+                                     if (nextD.type === 'separator') {
+                                         hasNextSeparator = true;
+                                         break;
+                                     }
+                                 }
+                             }
+                             
+                             let count =0;
+                             if (isCollapsed) {
+                                 for (let j = i + 1; j < docs.length; j++) {
+                                     const nextD = docs[j].data();
+                                     if (nextD.type === 'separator') break;
+                                     count++;
+                                 }
+                             }
+
+                             const deleteBtnHTML = isAdmin 
+                                ? `<button class="separator-delete-btn" onclick="handleDelete('${docSnap.id}')" title="حذف الخط">x</button>`
+                                : '';
+
+                             const arrowIcon = isCollapsed ? 'fa-chevron-right' : 'fa-chevron-down';
+                             
+                             const hiddenClass = isCollapsed && count > 0 ? 'has-hidden' : '';
+                             const hiddenText = isCollapsed && count > 0 ? `<span class="hidden-count">(${count} مخفية)</span>` : '';
+
+                             const tr = document.createElement('tr');
+                             tr.className = 'separator-row';
+                             tr.setAttribute('data-id', sepId); // مهم للبحث عنه
+                             
+                             // إضافة النقطة الخاصة بالتصوير
+                             const dotHTML = `
+                                <div class="screenshot-dot-container">
+                                    <div class="screenshot-dot" onclick="captureSection('${sepId}')" title="تصوير هذا القسم">
+                                        <i class="fas fa-camera"></i>
+                                    </div>
+                                </div>
+                             `;
+
+                             tr.innerHTML = `
+                                <td colspan="${colSpanCount}">
+                                    <div class="red-separator-line">
+                                        ${dotHTML}
+                                        <div class="separator-label-container ${hiddenClass}" onclick="toggleCollapse('${docSnap.id}')">
+                                            <i class="fas ${arrowIcon}" style="margin-left:5px;"></i>
+                                            <span>${d.dayLabel || 'فصل'}</span>
+                                            ${hiddenText}
                                         </div>
-                                    </td>
-                                </tr>
+                                        ${deleteBtnHTML}
+                                    </div>
+                                </td>
                             `;
+                             fragment.appendChild(tr);
+
+                             // --- التعديل: تفعيل skipMode فقط إذا كان مطوياً ووجود فاصل تالي ---
+                             if (isCollapsed && hasNextSeparator) {
+                                 skipMode = true;
+                             }
                         }
-                        return;
+                        continue;
+                    }
+
+                    if (skipMode) {
+                        continue;
                     }
 
                     const docDate = d.uoi ? d.uoi.toDate() : null;
@@ -1323,22 +1772,32 @@
                             actionsHTML += `<button onclick="handleDelete('${docSnap.id}')" class="btn-delete"><i class="fas fa-trash"></i> حذف</button>`;
                         }
 
-                        body.innerHTML += `
-                            <tr>
-                                <td style="font-weight:bold; font-size:0.9rem;">${d.qwe} ${statusBadge}</td>
-                                <td style="font-size:0.9rem;">${displayAmountText}</td>
-                                <td>
-                                    <div class="rating-wrapper">
-                                        <span class="badge ${badgeClass}">${badgeText}</span>
-                                        ${likeHTML}
-                                    </div>
-                                </td>
-                                <td style="font-size: 0.85rem; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${d.nmk||'-'}</td>
-                                <td style="font-size: 0.8rem; color:#6B7280;">${t}</td>
-                                <td>${actionsHTML}</td>
-                            </tr>`;
+                        let scoreHTML = '';
+                        let scoreVal = d.score !== undefined ? d.score : '-';
+                        let displayScore = (scoreVal !== '-') ? scoreVal + '%' : scoreVal;
+                        scoreHTML = `<td class="col-score" style="text-align:center; font-weight:bold; color:var(--primary-color);">${displayScore}</td>`;
+
+                        let finalActionsHTML = `<td class="col-actions">${actionsHTML}</td>`;
+
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td style="font-weight:bold; font-size:0.9rem;">${d.qwe} ${statusBadge}</td>
+                            <td style="font-size:0.9rem;">${displayAmountText}</td>
+                            ${scoreHTML}
+                            <td>
+                                <div class="rating-wrapper">
+                                    <span class="badge ${badgeClass}">${badgeText}</span>
+                                    ${likeHTML}
+                                </div>
+                            </td>
+                            <td style="font-size: 0.85rem; max-width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${d.nmk||'-'}</td>
+                            <td style="font-size: 0.8rem; color:var(--text-light);">${t}</td>
+                            ${finalActionsHTML}
+                        `;
+                        fragment.appendChild(tr);
                     }
-                });
+                }
+                body.appendChild(fragment);
             }
 
             if(visibleCount === 0) { empty.style.display='block'; table.style.display='none'; }
