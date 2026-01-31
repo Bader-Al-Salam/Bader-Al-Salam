@@ -728,7 +728,7 @@
                 </div>
                 <div class="dev-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>ادلب سوريا </span>
+                    <span>ادلب سوريا</span>
                 </div>
                 <div class="dev-item">
                     <i class="fas fa-code-branch"></i>
@@ -890,9 +890,9 @@
             document.getElementById('amount-total').value = total;
         }
 
-        // دالة وضع خط الفصل
+        // دالة وضع خط الفصل (مع إضافة الطالب تلقائياً)
         window.addSeparatorLine = async () => {
-            if(!confirm('هل تريد وضع خط أحمر للفصل هنا؟ سيظهر الخط بين البيانات، وستظهر أي بيانات جديدة فوقه.')) return;
+            if(!confirm('هل تريد وضع خط أحمر للفصل هنا؟ سيظهر الخط بين البيانات، وسيتم إضافة بيانات الطالب "علي بن أبي طالب" فوقه.')) return;
             
             try {
                 const now = new Date();
@@ -907,13 +907,62 @@
                     separatorFreq = 'stages';
                 }
 
+                // 1. إضافة خط الفاصل
                 await addDoc(collection(db, "daily_records"), {
                     type: 'separator',
                     frequency: separatorFreq, 
                     dayLabel: dayName, 
                     uoi: serverTimestamp()
                 });
-                showToast('تم وضع خط الفصل بنجاح', 'success');
+
+                // 2. إضافة بيانات الطالب "علي بن أبي طالب" مباشرة فوق الفاصل
+                // لكي يظهر فوقه، يجب أن يكون تاريخه أحدث (لأن الترتيب تنازلي desc)
+                
+                let studentData = {
+                    qwe: "علي بن أبي طالب",
+                    zxc: "excellent", // ممتاز
+                    likes: 0,
+                    uoi: serverTimestamp() // سيكون هذا التاريخ بعد الفاصل بفارق زمني بسيط جداً
+                };
+
+                // تعبئة الحقول حسب نوع المتابعة الحالي
+                if (separatorFreq === 'reciters') {
+                    // بيانات المختبرين
+                    studentData.asd = "جزء عم"; // المقدار
+                    studentData.unit = "جزء";
+                    studentData.score = 100; // الدرجة
+                    studentData.nmk = "اختبار جزء عم";
+                    studentData.frequency = 'monthly'; // المختبرين يعتبرون شهري
+                } 
+                else if (separatorFreq === 'stages') {
+                    // بيانات المراحل
+                    studentData.asd = 1;
+                    studentData.unit = "السدس الأول"; // المرحلة
+                    studentData.score = 100;
+                    studentData.nmk = "اختبار مرحلة";
+                    studentData.frequency = 'stages';
+                } 
+                else {
+                    // بيانات المتابعة (يومي، أسبوعي، شهري)
+                    studentData.frequency = separatorFreq;
+                    studentData.attr = "present"; // حضور
+                    studentData.nmk = "أول الحضور";
+
+                    if (separatorFreq === 'monthly') {
+                         studentData.asdText = "تسميع الجزء الأول";
+                         studentData.asd = 1;
+                    } else {
+                        // يومي أو أسبوعي
+                        studentData.page_from = 1;
+                        studentData.page_to = 2;
+                        studentData.asd = 1; // 2 - 1
+                        studentData.asdText = "من 1 إلى 2";
+                    }
+                }
+
+                await addDoc(collection(db, "daily_records"), studentData);
+
+                showToast('تم وضع خط الفصل وإضافة الطالب بنجاح', 'success');
             } catch(err) {
                 console.error(err);
                 showToast('حدث خطأ أثناء وضع الخط', 'error');
