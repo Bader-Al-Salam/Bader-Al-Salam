@@ -573,7 +573,7 @@
                     <input type="hidden" id="frequency" value="daily">
 
                     <div class="input-row" style="margin-top: 1rem;">
-                        <div class="form-group"><label>التقييم</label><select id="level" class="form-control" required><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="average">متوسط</option><option value="needs-improvement">ضعيف</option></select></div>
+                        <div class="form-group"><label>التقييم</label><select id="level" class="form-control" required><option value="" disabled selected>اختر التقييم...</option><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="average">متوسط</option><option value="needs-improvement">ضعيف</option></select></div>
                         
                         <!-- حقل الحالة -->
                         <div class="form-group" id="attendance-group">
@@ -606,7 +606,7 @@
                             <input type="text" id="reciter-amount" class="form-control" placeholder="اكتب اسم الجزء هنا..." required>
                         </div>
                         <div class="form-group"><label>الدرجة من 100%</label><input type="number" id="reciter-score" class="form-control" min="0" max="100" placeholder="100" required></div>
-                        <div class="form-group"><label>التقييم</label><select id="reciter-level" class="form-control" required><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="average">متوسط</option><option value="needs-improvement">ضعيف</option></select></div>
+                        <div class="form-group"><label>التقييم</label><select id="reciter-level" class="form-control" required><option value="" disabled selected>اختر التقييم...</option><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="average">متوسط</option><option value="needs-improvement">ضعيف</option></select></div>
                     </div>
                     <div class="form-group" style="margin-top:10px;"><label>تاريخ الاختبار</label><input type="date" id="reciter-date" class="form-control" required></div>
                     <div style="text-align:left; margin-top: 1rem;">
@@ -646,7 +646,7 @@
                             </select>
                         </div>
                         <div class="form-group"><label>الدرجة من 100%</label><input type="number" id="stages-score" class="form-control" min="0" max="100" placeholder="100" required></div>
-                        <div class="form-group"><label>التقييم</label><select id="stages-level" class="form-control" required><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="average">متوسط</option><option value="needs-improvement">ضعيف</option></select></div>
+                        <div class="form-group"><label>التقييم</label><select id="stages-level" class="form-control" required><option value="" disabled selected>اختر التقييم...</option><option value="excellent">ممتاز</option><option value="good">جيد</option><option value="average">متوسط</option><option value="needs-improvement">ضعيف</option></select></div>
                     </div>
                     <div class="form-group" style="margin-top:10px;"><label>ملاحظات</label><input type="text" id="stages-notes" class="form-control" placeholder="ملاحظات..."></div>
                     <div style="text-align:left; margin-top: 1rem;">
@@ -894,9 +894,9 @@
             document.getElementById('amount-total').value = total;
         }
 
-        // دالة وضع خط الفصل (مع إضافة الطالب تلقائياً)
+        // دالة وضع خط الفصل (تم التعديل لإضافة سجل فارغ)
         window.addSeparatorLine = async () => {
-            if(!confirm('هل تريد وضع خط أحمر للفصل هنا؟ سيظهر الخط بين البيانات، وسيتم إضافة بيانات الطالب "علي بن أبي طالب" فوقه.')) return;
+            if(!confirm('هل تريد وضع خط أحمر للفصل هنا؟ سيتم إضافة سجل طالب فارغ جاهز للكتابة.')) return;
             
             try {
                 const now = new Date();
@@ -919,53 +919,51 @@
                     uoi: serverTimestamp()
                 });
 
-                // 2. إضافة بيانات الطالب "علي بن أبي طالب" مباشرة فوق الفاصل
-                // لكي يظهر فوقه، يجب أن يكون تاريخه أحدث (لأن الترتيب تنازلي desc)
-                
+                // 2. إضافة سجل طالب فارغ تماماً
                 let studentData = {
-                    qwe: "علي بن أبي طالب",
-                    zxc: "excellent", // ممتاز
-                    uoi: serverTimestamp() // سيكون هذا التاريخ بعد الفاصل بفارق زمني بسيط جداً
+                    qwe: "", // الاسم فارغ
+                    zxc: "", // التقييم فارغ لفرض الاختيار
+                    uoi: serverTimestamp() 
                 };
 
-                // تعبئة الحقول حسب نوع المتابعة الحالي
+                // تعبئة الحقول فارغة حسب نوع المتابعة الحالي
                 if (separatorFreq === 'reciters') {
-                    // بيانات المختبرين
-                    studentData.asd = "جزء عم"; // المقدار
+                    // بيانات المختبرين (فارغة)
+                    studentData.asd = ""; // المقدار فارغ
                     studentData.unit = "جزء";
-                    studentData.score = 100; // الدرجة
-                    studentData.nmk = "اختبار جزء عم";
-                    studentData.frequency = 'monthly'; // المختبرين يعتبرون شهري
+                    studentData.score = 0; // الدرجة 0
+                    studentData.nmk = ""; // الملاحظات فارغة
+                    studentData.frequency = 'monthly'; 
                 } 
                 else if (separatorFreq === 'stages') {
-                    // بيانات المراحل
-                    studentData.asd = 1;
-                    studentData.unit = "السدس الأول"; // المرحلة
-                    studentData.score = 100;
-                    studentData.nmk = "اختبار مرحلة";
+                    // بيانات المراحل (فارغة)
+                    studentData.asd = 0;
+                    studentData.unit = "السدس الأول";
+                    studentData.score = 0;
+                    studentData.nmk = "";
                     studentData.frequency = 'stages';
                 } 
                 else {
-                    // بيانات المتابعة (يومي، أسبوعي، شهري)
+                    // بيانات المتابعة (فارغة)
                     studentData.frequency = separatorFreq;
-                    studentData.attr = "present"; // حضور
-                    studentData.nmk = "أول الحضور";
+                    studentData.attr = "present";
+                    studentData.nmk = "";
 
                     if (separatorFreq === 'monthly') {
-                         studentData.asdText = "تسميع الجزء الأول";
-                         studentData.asd = 1;
+                         studentData.asdText = ""; // نص الشهر فارغ
+                         studentData.asd = 0;
                     } else {
-                        // يومي أو أسبوعي
-                        studentData.page_from = 1;
-                        studentData.page_to = 2;
-                        studentData.asd = 2; // تم التعديل هنا: (2 - 1) + 1 = 2 صفحات
-                        studentData.asdText = "من 1 إلى 2";
+                        // يومي أو أسبوعي (صفحات فارغة)
+                        studentData.page_from = 0;
+                        studentData.page_to = 0;
+                        studentData.asd = 0;
+                        studentData.asdText = "";
                     }
                 }
 
                 await addDoc(collection(db, "daily_records"), studentData);
 
-                showToast('تم وضع خط الفصل وإضافة الطالب بنجاح', 'success');
+                showToast('تم وضع خط الفصل وإضافة سجل فارغ', 'success');
             } catch(err) {
                 console.error(err);
                 showToast('حدث خطأ أثناء وضع الخط', 'error');
@@ -986,9 +984,12 @@
             const separatorBtn = document.getElementById('btn-separator');
             const clearAllText = document.getElementById('btn-clear-text');
             
-            // إلغاء أي تعديل قيد التنفيذ عند الانتقال
-            handleCancelEdit(true);
-            // إلغاء وضع التصوير
+            // --- الإصلاح 1: إلغاء التعديل فقط إذا كنا ننتقل لقسم مختلف تماماً ---
+            // هذا يضمن أن زر التعديل لا يفقد الـ ID عند إعادة رسم نفس الصفحة
+            if (view !== currentView) {
+                handleCancelEdit(true);
+            }
+            // إلغاء وضع التصوير دائماً عند التنقل
             if(isScreenshotMode) toggleScreenshotMode();
 
             authSection.style.display = 'none';
@@ -1156,13 +1157,21 @@
             navigateTo('home');
         };
 
-        // دالة حفظ المختبرين
+        // دالة حفظ المختبرين (مع التحقق من التقييم)
         window.handleRecitersSubmit = async (e) => {
             e.preventDefault();
+            
+            // --- الإصلاح 3: التحقق من التقييم ---
+            const level = document.getElementById('reciter-level').value;
+            if(!level) {
+                document.getElementById('reciter-level').focus();
+                showToast('يرجى اختيار التقييم قبل الحفظ', 'warning');
+                return;
+            }
+
             const name = document.getElementById('reciter-name').value;
             const amount = document.getElementById('reciter-amount').value;
             const score = document.getElementById('reciter-score').value;
-            const level = document.getElementById('reciter-level').value;
             const dateStr = document.getElementById('reciter-date').value;
             
             const btn = e.target.querySelector('button[type="submit"]');
@@ -1208,14 +1217,25 @@
                     showToast('تم حفظ المختبر', 'success');
                     document.getElementById('reciters-form').reset();
                     document.getElementById('reciter-date').valueAsDate = new Date();
+                    // إعادة تعيين القيم الافتراضية للقائمة المنسدلة
+                    document.getElementById('reciter-level').value = "";
                 }
             } catch(err) { showToast('فشل الحفظ', 'error'); }
             btn.innerHTML = old;
         };
 
-        // دالة حفظ المراحل
+        // دالة حفظ المراحل (مع التحقق من التقييم)
         window.handleStagesSubmit = async (e) => {
             e.preventDefault();
+            
+            // --- الإصلاح 3: التحقق من التقييم ---
+            const level = document.getElementById('stages-level').value;
+            if(!level) {
+                document.getElementById('stages-level').focus();
+                showToast('يرجى اختيار التقييم قبل الحفظ', 'warning');
+                return;
+            }
+
             const btn = e.target.querySelector('button[type="submit"]');
             const old = btn.innerHTML;
             btn.innerHTML = '<span class="loader"></span> جاري الحفظ...';
@@ -1229,7 +1249,7 @@
                     asd: parseInt(amount),
                     unit: document.getElementById('stages-unit').value,
                     score: parseInt(document.getElementById('stages-score').value),
-                    zxc: document.getElementById('stages-level').value,
+                    zxc: level,
                     nmk: document.getElementById('stages-notes').value,
                     frequency: 'stages'
                 };
@@ -1244,14 +1264,24 @@
                     showToast('تم حفظ المرحلة', 'success');
                     document.getElementById('stages-form').reset();
                     document.getElementById('stages-amount').value = '1';
+                    document.getElementById('stages-level').value = "";
                 }
             } catch(err) { showToast('فشل الحفظ', 'error'); }
             btn.innerHTML = old;
         };
 
-        // دالة حفظ المتابعة
+        // دالة حفظ المتابعة (مع التحقق من التقييم)
         window.handleSubmit = async (e) => {
             e.preventDefault();
+            
+            // --- الإصلاح 3: التحقق من التقييم ---
+            const level = document.getElementById('level').value;
+            if(!level) {
+                document.getElementById('level').focus();
+                showToast('يرجى اختيار التقييم قبل الحفظ', 'warning');
+                return;
+            }
+
             const btn = e.target.querySelector('button[type="submit"]');
             const old = btn.innerHTML;
             btn.innerHTML = '<span class="loader"></span> جاري الحفظ...';
@@ -1285,7 +1315,7 @@
                     asd: asdVal, 
                     asdText: asdText, 
                     unit: "", 
-                    zxc: document.getElementById('level').value,
+                    zxc: level, // التقييم
                     frequency: frequency, 
                     nmk: document.getElementById('notes').value
                 };
@@ -1316,11 +1346,12 @@
                         document.getElementById('monthly-text').value = "";
                         document.getElementById('student-name').value = "";
                         document.getElementById('notes').value = "";
-                        document.getElementById('level').value = "excellent";
+                        document.getElementById('level').value = ""; // تصفير التقييم
                     } else {
                         document.getElementById('entry-form').reset();
                         document.getElementById('amount-total').value = "";
                         document.getElementById('attendance').value = 'present';
+                        document.getElementById('level').value = ""; // تصفير التقييم
                     }
                 }
             } catch(err) { showToast('فشل الحفظ', 'error'); }
@@ -1433,6 +1464,7 @@
             if(!silent) showToast('تم إلغاء التعديل', 'info');
         }
 
+        // حذف سجل عادي
         window.handleDelete = async (id) => {
             if(confirm('حذف التقييم نهائياً؟')) {
                 try {
@@ -1440,6 +1472,60 @@
                     if(editDocId === id) handleCancelEdit();
                     showToast('تم الحذف', 'success');
                 } catch(err) { showToast('فشل الحذف', 'error'); }
+            }
+        };
+
+        // --- الإصلاح 2: دالة حذف الخط الأحمر والبيانات التابعة له ---
+        window.handleDeleteSection = async (sepId) => {
+            if (!confirm('هل أنت متأكد من حذف هذا الخط الأحمر وكل البيانات التابعة له؟')) return;
+
+            try {
+                const docs = cachedSnapshot.docs;
+                let sepIndex = -1;
+                
+                // البحث عن الفاصل
+                for(let i=0; i<docs.length; i++) {
+                    if(docs[i].id === sepId) {
+                        sepIndex = i;
+                        break;
+                    }
+                }
+
+                if(sepIndex === -1) return;
+
+                const batch = writeBatch(db);
+                let count = 0;
+
+                // إضافة الفاصل نفسه للحذف
+                batch.delete(docs[sepIndex].ref);
+                count++;
+
+                // البحث عن السجلات التي تليه حتى الفاصل التالي
+                for(let i = sepIndex + 1; i < docs.length; i++) {
+                    const d = docs[i].data();
+                    if(d.type === 'separator') {
+                        // وصلنا لفاصل جديد، نتوقف
+                        break;
+                    }
+                    // حذف السجلات العادية
+                    batch.delete(docs[i].ref);
+                    count++;
+                }
+
+                await batch.commit();
+                showToast(`تم حذف ${count} سجلات بنجاح`, 'success');
+                
+                if(editDocId && count > 0) {
+                    // إذا كان المعدل ضمن المحذوفين، ألغِ التعديل
+                    // (تحقق بسيط: هل الـ ID موجود ضمن النطاق المحذوف؟ 
+                    // بما أننا لا نملك الـ IDs المحذوفة في مصفوفة مباشرة هنا، 
+                    // الأفضل دائماً إلغاء التعديل عند حذف جماعي لتجنب الأخطاء)
+                    handleCancelEdit(true);
+                }
+
+            } catch(err) {
+                console.error(err);
+                showToast('فشل الحذف الجماعي', 'error');
             }
         };
 
@@ -1510,7 +1596,7 @@
             }
         };
 
-        // --- الجديد: التقاط صورة لقسم محدد ---
+        // --- تم التعديل: دالة التقاط صورة لقسم محدد مع إصلاح الأعمدة والعنوان ---
         window.captureSection = async (sepId) => {
             if (!isScreenshotMode) return;
 
@@ -1541,17 +1627,23 @@
             tempTable.style.width = '100%';
             tempTable.style.borderCollapse = 'collapse';
             tempTable.style.backgroundColor = '#ffffff';
+            tempTable.style.tableLayout = 'auto';
 
             // استنساخ الترويسة
             const thead = document.querySelector('#records-table thead').cloneNode(true);
-            // إزالة عمود الإجراءات من الترويسة
+            
+            // إزالة عمود الإجراءات من الترويسة (دائماً)
             const thActions = thead.querySelector('.col-actions');
             if(thActions) thActions.remove();
             
-            // التعامل مع عمود الدرجات (إذا كان مخفياً في العرض، نزيله أو نضيفه حسب الرغبة، هنا سنحافظ على ظهوره إذا كان ظاهراً أصلاً)
+            // التحقق من عمود الدرجات (هل هو مخفي في العرض الحالي؟)
             const thScore = thead.querySelector('.col-score');
+            let shouldRemoveScoreCol = false;
+            
+            // إذا كان عميد الدرجات مخفياً، نحذفه من العنوان ونمشي الحذف للجسم
             if (thScore && thScore.style.display === 'none') {
                 thScore.remove();
+                shouldRemoveScoreCol = true;
             }
 
             // تلوين خلفية الترويسة للأبيض للصورة
@@ -1561,17 +1653,24 @@
                 th.style.borderBottom = '2px solid #000';
             });
 
-            tempTable.appendChild(thead);
+            // --- التعديل: حساب عدد الأعمدة المتبقية بعد التعديلات ---
+            const remainingColumnsCount = thead.querySelectorAll('th').length;
 
-            const tbody = document.createElement('tbody');
-            
-            // إضافة صف يحمل اسم اليوم/القسم (اختياري للجمالية)
+            // --- التعديل: إنشاء صف العنوان (اسم اليوم) وإضافته في بداية thead ---
             const sepRowData = allRows[separatorIndex];
             const sepLabel = sepRowData.querySelector('.separator-label-container span').innerText;
             
             const titleRow = document.createElement('tr');
-            titleRow.innerHTML = `<td colspan="6" style="text-align:center; padding:10px; font-weight:bold; font-size:1.1rem; background:#f9fafb; border-bottom:2px solid #ef4444;">سجل ${sepLabel}</td>`;
-            tbody.appendChild(titleRow);
+            titleRow.innerHTML = `<td colspan="${remainingColumnsCount}" style="text-align:center; padding:15px; font-weight:bold; font-size:1.2rem; background:#f9fafb; border-bottom:2px solid #ef4444; color: #000;">سجل ${sepLabel}</td>`;
+
+            // إضافة صف العنوان كأول صف في الترويسة
+            thead.insertBefore(titleRow, thead.firstChild);
+
+            // إضافة الترويسة إلى الجدول
+            tempTable.appendChild(thead);
+
+            // إنشاء tbody للبيانات
+            const tbody = document.createElement('tbody');
 
             rowsToCapture.forEach(row => {
                 const clone = row.cloneNode(true);
@@ -1579,6 +1678,12 @@
                 // إزالة عمود الإجراءات
                 const tdActions = clone.querySelector('.col-actions');
                 if(tdActions) tdActions.remove();
+
+                // إزالة عمود الدرجات إذا تم حذفه من الترويسة
+                if (shouldRemoveScoreCol) {
+                    const tdScore = clone.querySelector('.col-score');
+                    if(tdScore) tdScore.remove();
+                }
 
                 // تثبيت الألوان للصورة (وضع فاتح)
                 Array.from(clone.children).forEach(td => {
@@ -1706,8 +1811,9 @@
                                  }
                              }
 
+                             // --- الإصلاح 2: زر الحذف الجماعي ---
                              const deleteBtnHTML = isAdmin 
-                                ? `<button class="separator-delete-btn" onclick="handleDelete('${docSnap.id}')" title="حذف الخط">x</button>`
+                                ? `<button class="separator-delete-btn" onclick="handleDeleteSection('${docSnap.id}')" title="حذف الخط والبيانات">x</button>`
                                 : '';
 
                              const arrowIcon = isCollapsed ? 'fa-chevron-right' : 'fa-chevron-down';
